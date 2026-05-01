@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Supastack</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* =============================================
        CSS RESET + BASE
@@ -368,6 +369,15 @@
       padding: 1px 4px;
       border-radius: 3px;
       color: var(--text);
+    }
+
+    /* =============================================
+       EDIT CONTROLS
+    ============================================= */
+    .edit-controls {
+      display: none; /* shown only when authenticated */
+      gap: 6px;
+      align-items: center;
     }
 
     /* =============================================
@@ -787,7 +797,7 @@
   </div>
   <div class="header-right">
     <span class="header-meta" id="header-date"></span>
-    <button class="btn-login" onclick="alert('GitHub login coming in next task — authentication not yet wired up.')" title="Login with GitHub (coming soon)">
+    <button class="btn-login" id="login-btn" onclick="handleLoginClick()" title="Login with GitHub">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
@@ -801,6 +811,7 @@
       </svg>
       Login with GitHub
     </button>
+    <div id="user-info" style="display:none"></div>
   </div>
 </header>
 
@@ -837,6 +848,85 @@
     View on GitHub →
   </a>
 </footer>
+
+<!-- =============================================
+     SUPABASE AUTH
+============================================= -->
+<script>
+const SUPABASE_URL = 'https://scrubbed-project.supabase.co';
+const SUPABASE_ANON_KEY = 'SCRUBBED-KEY';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function escHtmlAuth(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+async function handleLoginClick() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      scopes: 'public_repo',
+      redirectTo: window.location.href
+    }
+  });
+  if (error) alert('Login error: ' + error.message);
+}
+
+async function handleLogoutClick() {
+  await supabase.auth.signOut();
+  updateAuthUI(null);
+}
+
+function updateAuthUI(session) {
+  const loginBtn = document.getElementById('login-btn');
+  const userInfo = document.getElementById('user-info');
+
+  if (session) {
+    // Store provider_token (GitHub token) for later use by commit logic
+    window._githubToken = session.provider_token;
+
+    const user = session.user;
+    const name = user.user_metadata?.user_name || user.email;
+    const avatar = user.user_metadata?.avatar_url;
+
+    loginBtn.style.display = 'none';
+    if (userInfo) {
+      userInfo.innerHTML =
+        (avatar ? `<img src="${escHtmlAuth(avatar)}" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">` : '') +
+        `<span style="margin-right:12px;font-size:14px">${escHtmlAuth(name)}</span>` +
+        `<button onclick="handleLogoutClick()" style="font-size:13px;padding:4px 10px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">Sign out</button>`;
+      userInfo.style.display = 'flex';
+      userInfo.style.alignItems = 'center';
+    }
+    // Show edit buttons
+    document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'flex');
+  } else {
+    window._githubToken = null;
+    loginBtn.style.display = '';
+    if (userInfo) {
+      userInfo.innerHTML = '';
+      userInfo.style.display = 'none';
+    }
+    // Hide edit buttons
+    document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'none');
+  }
+}
+
+async function initAuth() {
+  // Handle OAuth callback (Supabase puts session in URL hash)
+  const { data: { session } } = await supabase.auth.getSession();
+  updateAuthUI(session);
+
+  // Also listen for auth state changes
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAuthUI(session);
+  });
+}
+</script>
 
 <!-- =============================================
      RENDER SCRIPT
@@ -980,6 +1070,9 @@
   });
 
   sectionEls.forEach(el => io.observe(el));
+
+  /* ---------- Init auth ---------- */
+  initAuth();
 
 })();
 </script>
