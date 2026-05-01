@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Supastack</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <style>
     /* =============================================
        CSS RESET + BASE
@@ -1001,7 +1002,7 @@ async function initAuth() {
     // When editing is added, sanitize notes through DOMPurify before rendering.
     return `<details class="notes-details">
       <summary>notes</summary>
-      <div class="notes-content">${notes}</div>
+      <div class="notes-content">${typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes}</div>
     </details>`;
   }
 
@@ -1097,6 +1098,7 @@ async function initAuth() {
     threshold: 0
   });
 
+  window._stackObserver = io;
   sectionEls.forEach(el => io.observe(el));
 
   /* ---------- Init auth ---------- */
@@ -1116,7 +1118,7 @@ async function initAuth() {
 <!-- =============================================
      ENTRY MODAL
 ============================================= -->
-<div id="entry-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
+<div id="entry-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:12px;padding:32px;width:560px;max-width:90vw;max-height:90vh;overflow-y:auto">
     <h3 id="modal-title" style="margin:0 0 20px">Add Entry</h3>
     <form id="entry-form" onsubmit="return false">
@@ -1201,6 +1203,7 @@ function openAddModal() {
     return '<option value="' + escHtml(s.id) + '">' + escHtml(s.title) + '</option>';
   }).join('');
   document.getElementById('entry-modal').style.display = 'flex';
+  setTimeout(function() { document.getElementById('modal-section').focus(); }, 0);
 }
 
 function startEditEntry(sectionId, entryId) {
@@ -1221,6 +1224,7 @@ function startEditEntry(sectionId, entryId) {
   }).join('');
   select.value = sectionId;
   document.getElementById('entry-modal').style.display = 'flex';
+  setTimeout(function() { document.getElementById('modal-section').focus(); }, 0);
 }
 
 function closeModal() {
@@ -1243,7 +1247,7 @@ async function saveEntry() {
     var inputs = row.querySelectorAll('input');
     var lbl = inputs[0] && inputs[0].value.trim();
     var url = inputs[1] && inputs[1].value.trim();
-    if (lbl && url) links.push({ label: lbl, url: url });
+    if (lbl && url && /^https?:\/\//i.test(url)) links.push({ label: lbl, url: url });
   });
 
   var data = getCurrentData();
@@ -1301,7 +1305,7 @@ function renderAll(data) {
   }
   function _renderNotes(notes) {
     if (!notes) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
-    return '<details class="notes-details"><summary>notes</summary><div class="notes-content">' + notes + '</div></details>';
+    return '<details class="notes-details"><summary>notes</summary><div class="notes-content">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes) + '</div></details>';
   }
   function _renderEntry(entry, sectionId) {
     return '<tr class="entry-row" id="entry-' + _escHtml(entry.id) + '">' +
@@ -1350,6 +1354,11 @@ function renderAll(data) {
   if (headerDate) headerDate.textContent = 'Updated: ' + dateStr;
   var footerMeta = document.getElementById('footer-meta');
   if (footerMeta) footerMeta.textContent = 'Last updated: ' + dateStr + ' · Maintained by ' + ((data.meta && data.meta.owner) || '');
+
+  if (window._stackObserver) {
+    window._stackObserver.disconnect();
+    document.querySelectorAll('.stack-section').forEach(function(el) { window._stackObserver.observe(el); });
+  }
 }
 
 /* ---------- Commit to GitHub ---------- */
@@ -1408,6 +1417,13 @@ async function commitData(data, description) {
 /* ---------- Close modal on backdrop click ---------- */
 document.getElementById('entry-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
+});
+
+/* ---------- Close modal on Escape key ---------- */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('entry-modal').style.display !== 'none') {
+    closeModal();
+  }
 });
 </script>
 
