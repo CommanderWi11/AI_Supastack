@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Supastack</title>
+  <title>AI Supastack — Luis's AI Build</title>
+  <meta name="description" content="Step-by-step AI software stack for rebuilding from scratch">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <style>
@@ -855,6 +856,12 @@
   <nav id="sidebar" aria-label="Table of contents">
     <div class="sidebar-heading">Installation Order</div>
     <ul class="toc-list" id="toc-list"></ul>
+    <div style="padding:0 16px">
+      <button id="add-section-btn" class="edit-controls" onclick="openAddSectionModal()"
+        style="margin-top:16px;width:100%;padding:8px;background:#0969da;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">
+        + Add Section
+      </button>
+    </div>
   </nav>
 
   <main id="main">
@@ -1147,6 +1154,22 @@ async function initAuth() {
 </div>
 
 <!-- =============================================
+     SECTION MODAL
+============================================= -->
+<div id="section-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center" role="dialog" aria-modal="true" aria-labelledby="section-modal-title">
+  <div style="background:#fff;border-radius:12px;padding:32px;width:420px;max-width:90vw">
+    <h3 id="section-modal-title" style="margin:0 0 20px">Add Section</h3>
+    <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Section Title</label>
+    <input id="section-title-input" type="text" placeholder="e.g. Password Manager"
+      style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:24px;font-size:14px;box-sizing:border-box">
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button type="button" onclick="closeSectionModal()" style="padding:8px 16px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">Cancel</button>
+      <button type="button" onclick="saveSection()" style="padding:8px 16px;background:#0969da;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
      EDIT / COMMIT SCRIPT
 ============================================= -->
 <script>
@@ -1328,6 +1351,9 @@ function renderAll(data) {
       '<div class="section-header">' +
         '<span class="section-order">' + section.order + '</span>' +
         '<h2 class="section-title">' + _escHtml(section.title) + '</h2>' +
+        '<div class="edit-controls" style="display:inline-flex;margin-left:12px;vertical-align:middle">' +
+          '<button onclick="deleteSection(\'' + _escHtml(section.id) + '\')" style="font-size:11px;padding:2px 8px;border:1px solid #d0d7de;border-radius:4px;background:#fff8f8;color:#cf222e;cursor:pointer">Delete section</button>' +
+        '</div>' +
       '</div>' +
       '<table class="entries-table">' +
         '<thead><tr>' +
@@ -1343,6 +1369,26 @@ function renderAll(data) {
 
   var main = document.getElementById('main');
   main.innerHTML = data.sections.map(_renderSection).join('');
+
+  // Rebuild TOC
+  var tocList = document.getElementById('toc-list');
+  if (tocList) {
+    tocList.innerHTML = '';
+    data.sections.forEach(function(section) {
+      var li = document.createElement('li');
+      li.className = 'toc-item';
+      li.dataset.id = section.id;
+      li.innerHTML = '<a href="#section-' + _escHtml(section.id) + '"><span class="toc-num">' + section.order + '</span>' + _escHtml(section.title) + '</a>';
+      tocList.appendChild(li);
+    });
+  }
+  // Also update mobile select
+  var mobileSelect = document.getElementById('mobile-select');
+  if (mobileSelect) {
+    mobileSelect.innerHTML = '<option value="">— choose section —</option>' + data.sections.map(function(s) {
+      return '<option value="' + _escHtml(s.id) + '">' + s.order + '. ' + _escHtml(s.title) + '</option>';
+    }).join('');
+  }
 
   var isAuthed = !!window._githubToken;
   document.querySelectorAll('.edit-controls').forEach(function(el) {
@@ -1414,15 +1460,58 @@ async function commitData(data, description) {
   }
 }
 
+/* ---------- Add Section modal ---------- */
+function openAddSectionModal() {
+  document.getElementById('section-title-input').value = '';
+  document.getElementById('section-modal').style.display = 'flex';
+  setTimeout(function() { document.getElementById('section-title-input').focus(); }, 0);
+}
+
+function closeSectionModal() {
+  document.getElementById('section-modal').style.display = 'none';
+}
+
+async function saveSection() {
+  var title = document.getElementById('section-title-input').value.trim();
+  if (!title) { alert('Title is required'); return; }
+  var data = getCurrentData();
+  var maxOrder = Math.max(0, ...data.sections.map(function(s) { return s.order; }));
+  var id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  var uniqueId = data.sections.some(function(s) { return s.id === id; }) ? id + '-' + Date.now() : id;
+  data.sections.push({ id: uniqueId, title: title, order: maxOrder + 1, entries: [] });
+  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
+  closeSectionModal();
+  await commitData(data, 'add section ' + title);
+}
+
+/* ---------- Delete Section ---------- */
+async function deleteSection(sectionId) {
+  var data = getCurrentData();
+  var section = data.sections.find(function(s) { return s.id === sectionId; });
+  if (!section) return;
+  if (section.entries.length > 0) {
+    if (!confirm('Delete section "' + section.title + '" and all ' + section.entries.length + ' entries in it?')) return;
+  } else {
+    if (!confirm('Delete empty section "' + section.title + '"?')) return;
+  }
+  data.sections = data.sections.filter(function(s) { return s.id !== sectionId; });
+  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
+  await commitData(data, 'delete section ' + section.title);
+}
+
 /* ---------- Close modal on backdrop click ---------- */
 document.getElementById('entry-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
+document.getElementById('section-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeSectionModal();
+});
 
 /* ---------- Close modal on Escape key ---------- */
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('entry-modal').style.display !== 'none') {
-    closeModal();
+  if (e.key === 'Escape') {
+    if (document.getElementById('entry-modal').style.display !== 'none') closeModal();
+    if (document.getElementById('section-modal').style.display !== 'none') closeSectionModal();
   }
 });
 </script>
