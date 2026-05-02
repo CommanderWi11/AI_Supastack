@@ -660,33 +660,6 @@ Make both durable so they persist across restarts.</pre>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section>
-    <h2 class="section-title">Troubleshooting</h2>
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <div class="faq-q">I connected WHOOP but no emails are arriving</div>
-        <div class="faq-a">Check that your timezone is set correctly in app preferences (mainland Spain vs. Canary Islands). Reports fire at exactly 7:00 AM and 8:00 PM local time — they won't arrive early or late. Also confirm your beta approval is showing as approved in the app.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">The skill isn't finding the emails</div>
-        <div class="faq-a">Make sure the bot email address you entered in the app's preferences is the same inbox your OpenClaw agent has access to. The system sends to exactly that address — if there's a mismatch, emails go nowhere your agent can read.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">The scheduled tasks aren't firing</div>
-        <div class="faq-a">Durable cron jobs persist across restarts but OpenClaw must be running at the scheduled time. If it's closed at 7:03 AM, that run is skipped. There's no catch-up mechanism.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">WhatsApp messages are in Spanish</div>
-        <div class="faq-a">By design. The coach personality is Spanish-language only. Insults do not translate well.</div>
-      </div>
-
-    </div>
-  </section>
 
 </main>
 
