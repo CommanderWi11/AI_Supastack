@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Supastack — Luis's AI Build</title>
+  <title>AI Supastack — CommanderWi11 AI Build</title>
   <meta name="description" content="Step-by-step AI software stack for rebuilding from scratch">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
@@ -690,6 +690,15 @@
             { "label": "Repo", "url": "https://github.com/thedotmack/claude-mem" }
           ],
           "notes": "Persistent cross-session memory for Claude Code. Enables knowledge graphs, corpus search, timeline, and smart exploration. Install: <code>@thedotmack/claude-mem</code>"
+        },
+        {
+          "id": "plugin-psychologist-analyst",
+          "name": "psychologist-analyst",
+          "version": "latest",
+          "links": [
+            { "label": "Smithery", "url": "https://smithery.ai/skills/rysweet/psychologist-analyst" }
+          ],
+          "notes": "Claude Code skill by rysweet that adds psychological and emotional analysis capabilities — analyzes writing, journaling, and conversations for emotional patterns, mental state indicators, and behavioural insights. Install via Smithery."
         }
       ]
     },
@@ -706,15 +715,6 @@
             { "label": "Repo", "url": "https://github.com/makenotion/notion-mcp-server" }
           ],
           "notes": "Official Notion MCP server. Connects Claude Code to Airnest workspace via bot \"Cloude Connection Luis\". Run via Claude Code settings: <code>npx @notionhq/notion-mcp-server</code>. Set <code>NOTION_API_KEY</code> env var."
-        },
-        {
-          "id": "mcp-guesty",
-          "name": "Guesty MCP",
-          "version": "custom",
-          "links": [
-            { "label": "Guesty API Docs", "url": "https://open-api.guesty.com" }
-          ],
-          "notes": "Custom local stdio MCP server for Guesty property management. Located at <code>guesty-mcp/index.js</code> in the AI Coworking folder. Exposes 10 tools for listings, reservations, calendars, guests."
         },
         {
           "id": "mcp-canva",
@@ -755,7 +755,7 @@
           "name": "pw-demux hooks",
           "version": "latest",
           "links": [],
-          "notes": "Custom hook system. See ~/tools/pw/hooks/ for session-start.sh, pre-playwriter.sh, post-playwriter.sh. Three hooks: SessionStart (bootstrap), PreToolUse (inject ownership prelude), PostToolUse (cleanup). Diagnose: <code>bash ~/tools/pw/hooks/doctor.sh</code>"
+          "notes": "Custom hook system that enables parallel Playwright tabs — each Claude Code session gets its own tab via ownership tracking. Three hooks: SessionStart (bootstrap), PreToolUse (inject ownership prelude), PostToolUse (cleanup). Diagnose: <code>bash ~/tools/pw/hooks/doctor.sh</code>"
         }
       ]
     },
@@ -771,7 +771,7 @@
           "links": [
             { "label": "Repo", "url": "https://github.com/soywod/himalaya" }
           ],
-          "notes": "Terminal email client (IMAP/SMTP). Two GMX accounts configured. Install: <code>brew install himalaya</code>. Config at <code>~/.config/himalaya/config.toml</code>."
+          "notes": "Terminal email client (IMAP/SMTP). Install: <code>brew install himalaya</code>. Config at <code>~/.config/himalaya/config.toml</code>."
         }
       ]
     },
@@ -790,21 +790,62 @@
           ],
           "notes": "Zero-config VPN mesh network. Access any machine in your Tailnet by hostname. Install: <code>brew install --cask tailscale</code>"
         },
+      ]
+    },
+    {
+      "id": "web-tools",
+      "title": "Web Tools",
+      "order": 11,
+      "entries": [
         {
-          "id": "nomachine",
-          "name": "NoMachine",
+          "id": "supabase",
+          "name": "Supabase",
           "version": "latest",
           "links": [
-            { "label": "Site", "url": "https://www.nomachine.com" }
+            { "label": "Site", "url": "https://supabase.com" },
+            { "label": "Docs", "url": "https://supabase.com/docs" },
+            { "label": "Dashboard", "url": "https://app.supabase.com" }
           ],
-          "notes": "High-performance remote desktop (NX protocol). Works over Tailscale. Install: <code>brew install --cask nomachine</code>"
+          "notes": "Open-source Firebase alternative — Postgres database, auth, edge functions, realtime, and storage. Used across multiple projects (whoop-whatsapp, PilotFinance, ai-supastack auth). Create a free project at app.supabase.com."
+        },
+        {
+          "id": "obsidian",
+          "name": "Obsidian",
+          "version": "latest",
+          "links": [
+            { "label": "Site", "url": "https://obsidian.md" },
+            { "label": "Download", "url": "https://obsidian.md/download" }
+          ],
+          "notes": "Local-first markdown knowledge base — used as the persistent memory layer (AI Brain vault). All notes are plain <code>.md</code> files stored in iCloud. Install: <code>brew install --cask obsidian</code>"
+        },
+        {
+          "id": "vercel",
+          "name": "Vercel",
+          "version": "latest",
+          "links": [
+            { "label": "Site", "url": "https://vercel.com" },
+            { "label": "Dashboard", "url": "https://vercel.com/dashboard" },
+            { "label": "CLI Docs", "url": "https://vercel.com/docs/cli" }
+          ],
+          "notes": "Serverless deployment platform for Next.js and static sites. Used to deploy whoop-whatsapp and other web apps. Install CLI: <code>npm i -g vercel</code> then <code>vercel login</code>."
+        },
+        {
+          "id": "resend",
+          "name": "Resend",
+          "version": "latest",
+          "links": [
+            { "label": "Site", "url": "https://resend.com" },
+            { "label": "Docs", "url": "https://resend.com/docs" },
+            { "label": "Dashboard", "url": "https://resend.com/emails" }
+          ],
+          "notes": "Email API built for developers. Used to send transactional and automated emails (e.g. WHOOP health reports). Install SDK: <code>npm install resend</code>. Set <code>RESEND_API_KEY</code> env var."
         }
       ]
     },
     {
       "id": "ai-apps",
       "title": "AI-Powered Apps",
-      "order": 11,
+      "order": 12,
       "entries": [
         {
           "id": "whoop-whatsapp",
@@ -820,7 +861,7 @@
   ],
   "meta": {
     "lastUpdated": "2026-05-03",
-    "owner": "Luis"
+    "owner": "CommanderWi11"
   }
 }
 </script>
@@ -832,7 +873,7 @@
   <div class="header-left">
     <div>
       <div class="site-title">AI Supastack</div>
-      <div class="site-subtitle">Luis's AI build — step-by-step setup for a fresh machine</div>
+      <div class="site-subtitle">CommanderWi11 AI build — step-by-step setup for a fresh machine</div>
     </div>
   </div>
   <div class="header-right">
