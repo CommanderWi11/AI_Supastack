@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WHOOP Daily Briefings — Setup Guide</title>
+  <meta name="description" content="Connect your WHOOP and get AI-powered health coaching via WhatsApp. Step-by-step setup guide.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #0969da;
+      --blue-light: #dbeafe;
+      --blue-muted: #54aeff;
+      --text: #24292f;
+      --text-muted: #656d76;
+      --bg: #ffffff;
+      --bg-alt: #f6f8fa;
+      --border: #d0d7de;
+      --border-muted: #e8eaed;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --radius: 6px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+      --shadow: 0 3px 10px rgba(0,0,0,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* =============================================
+       HEADER
+    ============================================= */
+    #app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+    .header-left a { color: var(--text-muted); font-weight: 500; }
+    .header-left a:hover { color: var(--blue); text-decoration: none; }
+    .breadcrumb-sep { color: var(--border); }
+    .header-current { color: var(--text); font-weight: 600; }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: var(--font);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; }
+
+    .btn-dark {
+      color: var(--bg);
+      background: var(--text);
+      border: 1px solid var(--text);
+    }
+    .btn-dark:hover { background: #444c56; border-color: #444c56; }
+
+    .btn-outline {
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--bg-alt); }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    .hero {
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* =============================================
+       MAIN CONTENT
+    ============================================= */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* =============================================
+       WHAT YOU'LL GET — PREVIEW BUBBLES
+    ============================================= */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .preview-grid { grid-template-columns: 1fr; }
+    }
+
+    .preview-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .wa-bubble {
+      background: #dcf8c6;
+      border-radius: 8px 8px 8px 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #111;
+      white-space: pre-wrap;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .wa-bubble b { font-weight: 700; }
+    .wa-bubble i { font-style: italic; color: #555; }
+
+    .wa-bubble.red-recovery { background: #ffe0de; }
+
+    .preview-caption {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* =============================================
+       PREREQUISITES
+    ============================================= */
+    .prereq-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .prereq-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .prereq-icon {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .prereq-text strong { display: block; font-size: 13px; font-weight: 600; }
+    .prereq-text span { font-size: 12px; color: var(--text-muted); }
+
+    /* =============================================
+       STEPS
+    ============================================= */
+    .steps { display: flex; flex-direction: column; gap: 24px; }
+
+    .step {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-title { font-size: 15px; font-weight: 700; color: var(--text); }
+
+    .step-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-body p { font-size: 13.5px; line-height: 1.65; }
+    .step-body p + p { margin-top: -4px; }
+
+    /* placeholder URL highlight */
+    .placeholder-url {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #7d5a00;
+    }
+
+    /* =============================================
+       CODE BLOCKS
+    ============================================= */
+    .code-block {
+      position: relative;
+      margin: 4px 0;
+    }
+
+    .code-block pre {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--text);
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      font-family: var(--font);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: var(--border); color: var(--text); }
+    .copy-btn.copied { color: #1a7f37; border-color: #1a7f37; }
+
+    /* =============================================
+       FILE TREE
+    ============================================= */
+    .file-tree {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .file-tree .dir { color: var(--blue); font-weight: 600; }
+    .file-tree .file { color: var(--text-muted); }
+    .file-tree .highlight { color: var(--text); font-weight: 600; }
+
+    /* =============================================
+       DOWNLOAD BOX
+    ============================================= */
+    .download-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--blue-light);
+      border: 1px solid #bee3f8;
+      border-radius: var(--radius);
+    }
+
+    .download-box-info strong { display: block; font-size: 13px; font-weight: 700; }
+    .download-box-info span { font-size: 12px; color: var(--text-muted); }
+
+    @media (max-width: 480px) {
+      .download-box { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* =============================================
+       CALLOUT
+    ============================================= */
+    .callout {
+      display: flex;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      border-left: 3px solid;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .callout-info {
+      background: #e8f4fd;
+      border-color: var(--blue);
+      color: #0550ae;
+    }
+
+    .callout-warning {
+      background: #fff8c5;
+      border-color: #d4a017;
+      color: #7d5a00;
+    }
+
+    .callout-icon { flex-shrink: 0; margin-top: 1px; }
+
+    /* =============================================
+       FAQ
+    ============================================= */
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .faq-q {
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 13px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .faq-a {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--blue); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 768px) {
+      .hero { padding: 32px 20px 28px; }
+      .hero h1 { font-size: 22px; }
+      .content { padding: 28px 16px 60px; }
+      #app-header { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="app-header">
+  <div class="header-left">
+    <a href="./">AI Supastack</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="header-current">WHOOP Setup Guide</span>
+  </div>
+  <div class="header-right">
+    <a href="downloads/whoop-interpretation-skill.zip" download class="btn btn-dark">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.97a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.779a.749.749 0 1 1 1.06-1.06l1.97 1.97Z"/></svg>
+      Download Skill
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">
+    <span>🏃</span> Beta Access Required
+  </div>
+  <h1>WHOOP Daily Briefings — Setup Guide</h1>
+  <p>Connect your WHOOP and get AI-powered health coaching via WhatsApp, twice a day.</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+  <!-- WHAT YOU'LL GET -->
+  <section>
+    <h2 class="section-title">What You'll Get</h2>
+    <p style="margin-bottom:16px; color: var(--text-muted);">
+      Two WhatsApp messages a day — at <strong style="color:var(--text)">7:00 AM</strong> and <strong style="color:var(--text)">8:00 PM</strong> — from a brutally honest Spanish-speaking fitness coach who reads your WHOOP data so you can't lie to yourself. Here's what to expect:
+    </p>
+
+    <div class="preview-grid">
+      <div class="preview-card">
+        <div class="preview-label">Morning — Good recovery</div>
+        <div class="wa-bubble"><b>💤 Sueño: 7h 45min</b>, eficiencia 89%
+
+<b>❤️ Recuperación: 82%</b> (verde)
+HRV 12% por encima de tu media.
+<b>🏃 Esfuerzo ayer: 15.3</b> (alto)
+
+Cuerpo listo. Aprovecha o habrás desperdiciado la mejor forma que tenías en semanas.</div>
+        <div class="preview-caption">Mornings cover sleep, recovery &amp; yesterday's strain</div>
+      </div>
+
+      <div class="preview-card">
+        <div class="preview-label">Morning — Bad recovery</div>
+        <div class="wa-bubble red-recovery"><b>💤 Sueño: 5h 20min</b>, eficiencia 71%
+<i>Deuda acumulada: 4.2h.</i>
+<i>Sueño profundo bajo.</i>
+
+<b>❤️ Recuperación: 18%</b> (rojo)
+HRV un 23% bajo tu baseline.
+<b>🏃 Esfuerzo ayer: 16.8</b> (máximo)
+
+Entrenaste al límite con el cuerpo al 18%. Enhorabuena por saber escucharte. Hoy: descanso o te rompes.</div>
+        <div class="preview-caption">Insults are data-driven, not random</div>
+      </div>
+    </div>
+
+    <div class="preview-grid" style="margin-top:12px">
+      <div class="preview-card" style="grid-column: 1 / -1">
+        <div class="preview-label">Evening — Strain &amp; trends</div>
+        <div class="wa-bubble"><b>🏃 Esfuerzo hoy: 14.2</b> (alto)
+Pádel — 62min, esfuerzo 14.2
+
+<b>📊 Tendencia 7 días:</b> ascendente
+4 días por encima de 14 — el cuerpo acumula. Mañana decide si eres inteligente o simplemente terco.</div>
+        <div class="preview-caption">Evenings cover today's workouts and 7-day strain trend</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREREQUISITES -->
+  <section>
+    <h2 class="section-title">Prerequisites</h2>
+    <ul class="prereq-list">
+      <li>
+        <span class="prereq-icon">⌚</span>
+        <div class="prereq-text">
+          <strong>Active WHOOP membership + device</strong>
+          <span>Your WHOOP account email is needed for beta approval</span>
+        </div>
+      </li>
+      <li>
+        <span class="prereq-icon">💻</span>
+        <div class="prereq-text">
+          <strong>Claude Code installed and working</strong>
+          <span>The AI agent runs inside Claude Code with the schedule skill</span>
+        </div>
+      </li>
+      <li>
+        <span class="prereq-icon">🤖</span>
+        <div class="prereq-text">
+          <strong>OpenClaw set up with an agent</strong>
+          <span>You'll install the skill into your agent's skills directory</span>
+        </div>
+      </li>
+      <li>
+        <span class="prereq-icon">💬</span>
+        <div class="prereq-text">
+          <strong>WhatsApp account</strong>
+          <span>For receiving the briefing messages from your bot</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- STEPS -->
+  <section>
+    <h2 class="section-title">Setup — 6 Steps</h2>
+    <div class="steps">
+
+      <!-- STEP 1 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Sign Up on the Web App</div>
+        </div>
+        <div class="step-body">
+          <p>Go to <span class="placeholder-url">[APP-URL — update me]</span> and enter your email address. You'll receive a magic link — click it to log in. No password needed.</p>
+          <p>Once logged in, the app will ask for your <strong>WHOOP account email</strong> to create a beta access request. Fill it in and submit.</p>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Wait for Approval</div>
+        </div>
+        <div class="step-body">
+          <p>The admin (Luis) will receive a notification and will:</p>
+          <ul style="padding-left: 20px; margin: 4px 0; line-height: 2;">
+            <li>Add your WHOOP email as a test user in the WHOOP Developer Portal</li>
+            <li>Approve your beta request in the admin panel</li>
+          </ul>
+          <p>You'll get a confirmation email when you're approved. This is a manual step — expect up to a few hours.</p>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Connect Your WHOOP Account</div>
+        </div>
+        <div class="step-body">
+          <p>After approval, return to the app and click <strong>Connect WHOOP</strong>. This starts an OAuth flow — you'll be redirected to WHOOP to authorize access.</p>
+          <p>The app requests read-only access to: recovery, sleep, cycles, workouts, and profile data. No write permissions.</p>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div class="step-title">Set Your Preferences</div>
+        </div>
+        <div class="step-body">
+          <p>Once WHOOP is connected, configure two things:</p>
+          <ul style="padding-left: 20px; margin: 4px 0; line-height: 2.2;">
+            <li><strong>Bot email address</strong> — the email inbox your Claude Code agent monitors (where the WHOOP data emails will be sent)</li>
+            <li><strong>Timezone</strong> — Europe/Madrid (mainland Spain) or Atlantic/Canary (Canary Islands)</li>
+          </ul>
+          <p>The app sends two emails daily to your bot email: one at 7:00 AM and one at 8:00 PM, local to your timezone.</p>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">5</div>
+          <div class="step-title">Install the Interpretation Skill</div>
+        </div>
+        <div class="step-body">
+          <p>Download the skill package, unzip it, and move the folder into your agent's <code style="font-family:var(--mono); font-size:12px; background:var(--bg-alt); padding:1px 5px; border-radius:3px; border:1px solid var(--border)">skills/</code> directory:</p>
+
+          <div class="download-box">
+            <div class="download-box-info">
+              <strong>whoop-interpretation-skill.zip</strong>
+              <span>SKILL.md + _meta.json — v1.0.0</span>
+            </div>
+            <a href="downloads/whoop-interpretation-skill.zip" download class="btn btn-dark">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.97a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.779a.749.749 0 1 1 1.06-1.06l1.97 1.97Z"/></svg>
+              Download
+            </a>
+          </div>
+
+          <p>After unzipping, move the folder here:</p>
+          <div class="file-tree">
+<span class="dir">~/.openclaw/</span>
+<span class="dir">  your-agent/</span>
+<span class="dir">    skills/</span>
+<span class="highlight">      whoop-interpretation-skill/   ← move here</span>
+<span class="file">        SKILL.md</span>
+<span class="file">        _meta.json</span>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="callout-icon">ℹ️</span>
+            <span>The exact path depends on your OpenClaw setup. Replace <code style="font-family:var(--mono); font-size:12px">your-agent</code> with the actual name of your agent directory.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">6</div>
+          <div class="step-title">Set Up the Cron Schedule</div>
+        </div>
+        <div class="step-body">
+          <p>The skill needs to run at 7:00 AM and 8:00 PM every day. In Claude Code, paste this prompt to create both scheduled tasks at once:</p>
+
+          <div class="code-block">
+            <pre id="cron-prompt">Create two durable scheduled tasks:
+
+1. Every day at 7:03 AM local time — prompt:
+"Run the whoop-interpretation-skill: check for the latest
+WHOOP morning data email, interpret the health metrics
+using the skill, and send the WhatsApp briefing message."
+
+2. Every day at 8:03 PM local time — prompt:
+"Run the whoop-interpretation-skill: check for the latest
+WHOOP evening data email, interpret the health metrics
+using the skill, and send the WhatsApp briefing message."
+
+Make both durable so they persist across restarts.</pre>
+            <button class="copy-btn" onclick="copyCode('cron-prompt', this)">Copy</button>
+          </div>
+
+          <div class="callout callout-warning">
+            <span class="callout-icon">⚠️</span>
+            <span><strong>Claude Code must be running</strong> at 7:03 AM and 8:03 PM for the cron to fire. Keep it open in a persistent terminal session on a machine that's on at those times.</span>
+          </div>
+
+          <p style="color: var(--text-muted);">That's it. The skill handles everything else: finding the right email, parsing the JSON payload, interpreting the health data, and sending the WhatsApp message.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 class="section-title">Troubleshooting</h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-q">I connected WHOOP but no emails are arriving</div>
+        <div class="faq-a">Check that your timezone is set correctly in app preferences (mainland Spain vs. Canary Islands). Reports fire at exactly 7:00 AM and 8:00 PM local time — they won't arrive early or late. Also confirm your beta approval is showing as approved in the app.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">The skill isn't finding the emails</div>
+        <div class="faq-a">Make sure the bot email address you entered in the app's preferences is the same inbox your Claude Code agent has access to. The system sends to exactly that address — if there's a mismatch, emails go nowhere your agent can read.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">The scheduled tasks aren't firing</div>
+        <div class="faq-a">Durable cron jobs persist across restarts but Claude Code must be running at the scheduled time. If it's closed at 7:03 AM, that run is skipped. There's no catch-up mechanism.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">WhatsApp messages are in Spanish</div>
+        <div class="faq-a">By design. The coach personality is Spanish-language only. Insults do not translate well.</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <a href="./">← Back to AI Supastack</a>
+  <span style="color: var(--border-muted)">|</span>
+  <span>Built by Luis</span>
+  <span style="color: var(--border-muted)">|</span>
+  <a href="downloads/whoop-interpretation-skill.zip" download>Download Skill v1.0.0</a>
+</footer>
+
+<script>
+  function copyCode(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
