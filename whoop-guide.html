@@ -475,7 +475,7 @@
     <span>🏃</span> Beta Access Required
   </div>
   <h1>WHOOP Daily Briefings — Setup Guide</h1>
-  <p>Connect your WHOOP and get AI-powered health coaching via WhatsApp, twice a day.</p>
+  <p>Connect your WHOOP and get AI-powered (OpenClaw) health coaching via WhatsApp, twice a day.</p>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -484,49 +484,9 @@
   <!-- WHAT YOU'LL GET -->
   <section>
     <h2 class="section-title">What You'll Get</h2>
-    <p style="margin-bottom:16px; color: var(--text-muted);">
-      Two WhatsApp messages a day — at <strong style="color:var(--text)">7:00 AM</strong> and <strong style="color:var(--text)">8:00 PM</strong> — from a brutally honest Spanish-speaking fitness coach who reads your WHOOP data so you can't lie to yourself. Here's what to expect:
+    <p style="color: var(--text-muted);">
+      Two WhatsApp messages a day — at <strong style="color:var(--text)">7:00 AM</strong> and <strong style="color:var(--text)">8:00 PM</strong> — from a brutally honest Spanish-speaking fitness coach who reads your WHOOP data so you can't lie to yourself. Mornings cover sleep, recovery, and yesterday's strain. Evenings cover today's workouts and 7-day strain trend.
     </p>
-
-    <div class="preview-grid">
-      <div class="preview-card">
-        <div class="preview-label">Morning — Good recovery</div>
-        <div class="wa-bubble"><b>💤 Sueño: 7h 45min</b>, eficiencia 89%
-
-<b>❤️ Recuperación: 82%</b> (verde)
-HRV 12% por encima de tu media.
-<b>🏃 Esfuerzo ayer: 15.3</b> (alto)
-
-Cuerpo listo. Aprovecha o habrás desperdiciado la mejor forma que tenías en semanas.</div>
-        <div class="preview-caption">Mornings cover sleep, recovery &amp; yesterday's strain</div>
-      </div>
-
-      <div class="preview-card">
-        <div class="preview-label">Morning — Bad recovery</div>
-        <div class="wa-bubble red-recovery"><b>💤 Sueño: 5h 20min</b>, eficiencia 71%
-<i>Deuda acumulada: 4.2h.</i>
-<i>Sueño profundo bajo.</i>
-
-<b>❤️ Recuperación: 18%</b> (rojo)
-HRV un 23% bajo tu baseline.
-<b>🏃 Esfuerzo ayer: 16.8</b> (máximo)
-
-Entrenaste al límite con el cuerpo al 18%. Enhorabuena por saber escucharte. Hoy: descanso o te rompes.</div>
-        <div class="preview-caption">Insults are data-driven, not random</div>
-      </div>
-    </div>
-
-    <div class="preview-grid" style="margin-top:12px">
-      <div class="preview-card" style="grid-column: 1 / -1">
-        <div class="preview-label">Evening — Strain &amp; trends</div>
-        <div class="wa-bubble"><b>🏃 Esfuerzo hoy: 14.2</b> (alto)
-Pádel — 62min, esfuerzo 14.2
-
-<b>📊 Tendencia 7 días:</b> ascendente
-4 días por encima de 14 — el cuerpo acumula. Mañana decide si eres inteligente o simplemente terco.</div>
-        <div class="preview-caption">Evenings cover today's workouts and 7-day strain trend</div>
-      </div>
-    </div>
   </section>
 
   <!-- PREREQUISITES -->
@@ -544,7 +504,7 @@ Pádel — 62min, esfuerzo 14.2
         <span class="prereq-icon">💻</span>
         <div class="prereq-text">
           <strong>Claude Code installed and working</strong>
-          <span>The AI agent runs inside Claude Code with the schedule skill</span>
+          <span>The AI agent runs inside OpenClaw with the schedule skill</span>
         </div>
       </li>
       <li>
@@ -618,7 +578,7 @@ Pádel — 62min, esfuerzo 14.2
         <div class="step-body">
           <p>Once WHOOP is connected, configure two things:</p>
           <ul style="padding-left: 20px; margin: 4px 0; line-height: 2.2;">
-            <li><strong>Bot email address</strong> — the email inbox your Claude Code agent monitors (where the WHOOP data emails will be sent)</li>
+            <li><strong>Bot email address</strong> — the email inbox your OpenClaw agent monitors (where the WHOOP data emails will be sent)</li>
             <li><strong>Timezone</strong> — Europe/Madrid (mainland Spain) or Atlantic/Canary (Canary Islands)</li>
           </ul>
           <p>The app sends two emails daily to your bot email: one at 7:00 AM and one at 8:00 PM, local to your timezone.</p>
@@ -669,7 +629,7 @@ Pádel — 62min, esfuerzo 14.2
           <div class="step-title">Set Up the Cron Schedule</div>
         </div>
         <div class="step-body">
-          <p>The skill needs to run at 7:00 AM and 8:00 PM every day. In Claude Code, paste this prompt to create both scheduled tasks at once:</p>
+          <p>The skill needs to run at 7:00 AM and 8:00 PM every day. In your OpenClaw agent, paste this prompt to create both scheduled tasks at once:</p>
 
           <div class="code-block">
             <pre id="cron-prompt">Create two durable scheduled tasks:
@@ -690,7 +650,7 @@ Make both durable so they persist across restarts.</pre>
 
           <div class="callout callout-warning">
             <span class="callout-icon">⚠️</span>
-            <span><strong>Claude Code must be running</strong> at 7:03 AM and 8:03 PM for the cron to fire. Keep it open in a persistent terminal session on a machine that's on at those times.</span>
+            <span><strong>OpenClaw must be running</strong> at 7:03 AM and 8:03 PM for the cron to fire. Keep it open in a persistent terminal session on a machine that's on at those times.</span>
           </div>
 
           <p style="color: var(--text-muted);">That's it. The skill handles everything else: finding the right email, parsing the JSON payload, interpreting the health data, and sending the WhatsApp message.</p>
@@ -712,12 +672,12 @@ Make both durable so they persist across restarts.</pre>
 
       <div class="faq-item">
         <div class="faq-q">The skill isn't finding the emails</div>
-        <div class="faq-a">Make sure the bot email address you entered in the app's preferences is the same inbox your Claude Code agent has access to. The system sends to exactly that address — if there's a mismatch, emails go nowhere your agent can read.</div>
+        <div class="faq-a">Make sure the bot email address you entered in the app's preferences is the same inbox your OpenClaw agent has access to. The system sends to exactly that address — if there's a mismatch, emails go nowhere your agent can read.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q">The scheduled tasks aren't firing</div>
-        <div class="faq-a">Durable cron jobs persist across restarts but Claude Code must be running at the scheduled time. If it's closed at 7:03 AM, that run is skipped. There's no catch-up mechanism.</div>
+        <div class="faq-a">Durable cron jobs persist across restarts but OpenClaw must be running at the scheduled time. If it's closed at 7:03 AM, that run is skipped. There's no catch-up mechanism.</div>
       </div>
 
       <div class="faq-item">
