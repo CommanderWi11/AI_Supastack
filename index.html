@@ -1421,6 +1421,7 @@ async function initAuth() {
   }
 
   function renderSubEntries(subEntries) {
+    // s.notes may contain <code> tags — sanitized via DOMPurify, same as renderNotes
     if (!subEntries || subEntries.length === 0) return '';
     const items = subEntries.map(s =>
       `<li class="sub-entry">
@@ -1749,6 +1750,7 @@ function renderAll(data) {
     return '<details class="notes-details"><summary>notes</summary><div class="notes-content">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes) + '</div></details>';
   }
   function _renderSubEntries(subEntries) {
+    // s.notes may contain <code> tags — sanitized via DOMPurify, same as renderNotes
     if (!subEntries || subEntries.length === 0) return '';
     var items = subEntries.map(function(s) {
       return '<li class="sub-entry">' +
