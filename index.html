@@ -841,15 +841,6 @@
       "order": 10,
       "entries": [
         {
-          "id": "playwriter",
-          "name": "Playwriter CLI",
-          "version": "latest",
-          "links": [
-            { "label": "Playwright Docs", "url": "https://playwright.dev/docs/intro" }
-          ],
-          "notes": "Controls your real Chrome browser via Playwright from Claude Code. Hook-driven: start a task with <code>acquirePage()</code>, then use <code>state.page</code>. Ask Luis for exact install command."
-        },
-        {
           "id": "pw-demux",
           "name": "pw-demux hooks",
           "version": "latest",
@@ -928,6 +919,19 @@
             { "label": "Dashboard", "url": "https://resend.com/emails" }
           ],
           "notes": "Email API built for developers. Used to send transactional and automated emails (e.g. WHOOP health reports). Install SDK: <code>npm install resend</code>. Set <code>RESEND_API_KEY</code> env var."
+        },
+        {
+          "id": "paperclip",
+          "name": "Paperclip",
+          "links": [
+            { "label": "Docs", "url": "https://paperclip.sh" }
+          ],
+          "notes": "AI agent governance and coordination platform — manages tasks, agents, and workflows across sessions. Interacts via three bundled skills.",
+          "subEntries": [
+            { "id": "paperclip", "notes": "Interacts with the Paperclip API — checks assignments, updates task status, delegates work, posts comments." },
+            { "id": "paperclip-create-agent", "notes": "Hires or configures new agents with governance-aware workflow — inspects adapters, drafts prompts, submits hire requests." },
+            { "id": "paperclip-create-plugin", "notes": "Scaffolds new Paperclip plugins using the alpha SDK/runtime. Covers worker/UI surface, route conventions, and verification." }
+          ]
         }
       ]
     },
