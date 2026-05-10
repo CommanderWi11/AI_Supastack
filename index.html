@@ -723,47 +723,81 @@
         {
           "id": "plugin-superpowers",
           "name": "superpowers",
-          "version": "latest",
           "links": [
             { "label": "Repo", "url": "https://github.com/anthropics/claude-code" }
           ],
-          "notes": "Official Anthropic plugin — adds planning, brainstorm, debugging, and systematic workflow skills. Install via Claude Code plugin manager: <code>@claude-plugins-official/superpowers</code>"
+          "notes": "Official Anthropic plugin — adds planning, brainstorm, debugging, and systematic workflow skills. Install: <code>@claude-plugins-official/superpowers</code>",
+          "subEntries": [
+            { "id": "superpowers:brainstorming", "notes": "Explores intent, design, and tradeoffs before any feature implementation. Invoke before building." },
+            { "id": "superpowers:test-driven-development", "notes": "Enforces TDD discipline — writes tests before implementation code." },
+            { "id": "superpowers:systematic-debugging", "notes": "Structured debugging protocol. Diagnoses root cause before proposing fixes." },
+            { "id": "superpowers:writing-plans", "notes": "Converts a spec into a phased, reviewable implementation plan." },
+            { "id": "superpowers:executing-plans", "notes": "Executes a written plan in a new session with review checkpoints." },
+            { "id": "superpowers:verification-before-completion", "notes": "Requires running verification commands before claiming work is done." },
+            { "id": "superpowers:finishing-a-development-branch", "notes": "Wraps up a feature branch — cleanup, tests, changelog, PR prep." },
+            { "id": "superpowers:using-git-worktrees", "notes": "Isolates feature work in a git worktree so the main workspace stays clean." },
+            { "id": "superpowers:requesting-code-review", "notes": "Prepares code for peer review — structures the PR, highlights decisions, identifies risk areas." },
+            { "id": "superpowers:receiving-code-review", "notes": "Guides acting on review feedback systematically." },
+            { "id": "superpowers:dispatching-parallel-agents", "notes": "Splits work across multiple subagents running in parallel." },
+            { "id": "superpowers:subagent-driven-development", "notes": "Executes independent implementation tasks via parallel subagents." }
+          ]
         },
         {
           "id": "plugin-frontend-design",
           "name": "frontend-design",
-          "version": "latest",
           "links": [
             { "label": "Plugin Store", "url": "https://github.com/anthropics/claude-code" }
           ],
-          "notes": "Official Anthropic plugin — high-quality frontend design generation skill. Install: <code>@claude-plugins-official/frontend-design</code>"
+          "notes": "Official Anthropic plugin — high-quality frontend design generation skill. Install: <code>@claude-plugins-official/frontend-design</code>",
+          "subEntries": [
+            { "id": "frontend-design:frontend-design", "notes": "Generates production-quality, distinctive frontend UI. Avoids generic AI aesthetics. Invoke when building web components, pages, or applications." }
+          ]
         },
         {
           "id": "plugin-claude-mem",
           "name": "claude-mem",
-          "version": "latest",
           "links": [
             { "label": "Repo", "url": "https://github.com/thedotmack/claude-mem" }
           ],
-          "notes": "Persistent cross-session memory for Claude Code. Enables knowledge graphs, corpus search, timeline, and smart exploration. Install: <code>@thedotmack/claude-mem</code>"
+          "notes": "Persistent cross-session memory for Claude Code. Enables knowledge graphs, corpus search, timeline, and smart exploration. Install: <code>@thedotmack/claude-mem</code>",
+          "subEntries": [
+            { "id": "claude-mem:mem-search", "notes": "Searches persistent cross-session memory database. Recall past decisions, solutions, or context." },
+            { "id": "claude-mem:make-plan", "notes": "Creates a phased implementation plan stored in memory, visible across sessions." },
+            { "id": "claude-mem:do", "notes": "Executes a plan stored in claude-mem via subagents." },
+            { "id": "claude-mem:smart-explore", "notes": "Token-efficient codebase structure search. Maps a repo's shape without exhausting context." },
+            { "id": "claude-mem:timeline-report", "notes": "Generates a full project development history report from claude-mem's observation log." }
+          ]
         },
         {
-          "id": "plugin-pw-playwright-pro",
-          "name": "pw (Playwright Pro)",
-          "version": "latest",
+          "id": "plugin-playwright-pro",
+          "name": "Playwright Pro",
           "links": [
             { "label": "Plugin Hub", "url": "https://www.claudepluginhub.com/plugins/alirezarezvani-pw-engineering-team-playwright-pro" }
           ],
-          "notes": "Automates the full Playwright E2E testing lifecycle: generates tests from user stories, URLs, or codebases (React/Next.js/Vue/Angular/Svelte); migrates Cypress/Selenium suites; diagnoses and fixes flaky failures; reviews for best practices and coverage; syncs results with TestRail; runs on BrowserStack; and produces Markdown/HTML/Slack reports that integrate into CI workflows."
+          "notes": "Automates the full Playwright E2E testing lifecycle: generates tests from user stories, URLs, or codebases; migrates Cypress/Selenium suites; diagnoses and fixes flaky failures; reviews for best practices and coverage; produces Markdown/HTML/Slack reports.",
+          "subEntries": [
+            { "id": "playwriter", "notes": "Controls your real Chrome browser via Playwright. Hook-driven: start with <code>acquirePage()</code>, use <code>state.page</code>. Handles JS-heavy SPAs, login walls, lazy-loaded UIs." }
+          ]
         },
         {
           "id": "plugin-psychologist-analyst",
           "name": "psychologist-analyst",
-          "version": "latest",
           "links": [
             { "label": "Smithery", "url": "https://smithery.ai/skills/rysweet/psychologist-analyst" }
           ],
-          "notes": "Claude Code skill by rysweet that adds psychological and emotional analysis capabilities — analyzes writing, journaling, and conversations for emotional patterns, mental state indicators, and behavioural insights. Install via Smithery."
+          "notes": "Claude Code skill by rysweet — analyzes writing, journaling, and conversations for emotional patterns, mental state indicators, and behavioural insights. Install via Smithery."
+        },
+        {
+          "id": "plugin-claude-hud",
+          "name": "claude-hud",
+          "links": [
+            { "label": "Plugin Hub", "url": "https://github.com/disler/claude-hud" }
+          ],
+          "notes": "Status-bar HUD for Claude Code — shows model, token usage, cost, and session info in real time. Install: <code>@claude-hud/claude-hud</code>",
+          "subEntries": [
+            { "id": "claude-hud:setup", "notes": "Configures claude-hud as a statusline in the Claude Code terminal." },
+            { "id": "claude-hud:configure", "notes": "Adjusts claude-hud layout, display language, and presets." }
+          ]
         }
       ]
     },
