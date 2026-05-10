@@ -952,310 +952,118 @@
       ]
     },
     {
-      "id": "superpowers-skills",
-      "title": "Superpowers Skills",
+      "id": "custom-skills",
+      "title": "Custom Skills",
       "order": 15,
-      "entries": [
-        {
-          "id": "skill-brainstorming",
-          "name": "superpowers:brainstorming",
-          "version": "built-in",
-          "links": [],
-          "notes": "Explores intent, design, and tradeoffs before any feature implementation. Invoke before building — surfaces hidden requirements and prevents wrong-direction work."
-        },
-        {
-          "id": "skill-tdd",
-          "name": "superpowers:test-driven-development",
-          "version": "built-in",
-          "links": [],
-          "notes": "Enforces TDD discipline — writes tests before implementation code. Invoke before any feature or bugfix to ensure coverage drives design."
-        },
-        {
-          "id": "skill-debugging",
-          "name": "superpowers:systematic-debugging",
-          "version": "built-in",
-          "links": [],
-          "notes": "Structured debugging protocol for bugs, test failures, and unexpected behavior. Prevents guessing — diagnoses root cause before proposing fixes."
-        },
-        {
-          "id": "skill-writing-plans",
-          "name": "superpowers:writing-plans",
-          "version": "built-in",
-          "links": [],
-          "notes": "Converts a spec or requirements into a phased, reviewable implementation plan. Use before touching code on any multi-step task."
-        },
-        {
-          "id": "skill-executing-plans",
-          "name": "superpowers:executing-plans",
-          "version": "built-in",
-          "links": [],
-          "notes": "Executes a written plan in a new session with review checkpoints. Ensures the plan is followed and progress is tracked."
-        },
-        {
-          "id": "skill-verification",
-          "name": "superpowers:verification-before-completion",
-          "version": "built-in",
-          "links": [],
-          "notes": "Requires running verification commands and confirming output before claiming work is done or creating a PR. Evidence before assertions."
-        },
-        {
-          "id": "skill-finishing-branch",
-          "name": "superpowers:finishing-a-development-branch",
-          "version": "built-in",
-          "links": [],
-          "notes": "Wraps up a feature branch — cleanup, tests, changelog, PR prep. Ensures nothing is left dangling before merge."
-        },
-        {
-          "id": "skill-git-worktrees",
-          "name": "superpowers:using-git-worktrees",
-          "version": "built-in",
-          "links": [],
-          "notes": "Isolates feature work in a git worktree so the main workspace stays clean. Use before any implementation that could conflict with in-progress work."
-        },
-        {
-          "id": "skill-requesting-review",
-          "name": "superpowers:requesting-code-review",
-          "version": "built-in",
-          "links": [],
-          "notes": "Prepares code for peer review — structures the PR, highlights decisions, identifies risk areas. Use when ready for another set of eyes."
-        },
-        {
-          "id": "skill-receiving-review",
-          "name": "superpowers:receiving-code-review",
-          "version": "built-in",
-          "links": [],
-          "notes": "Guides acting on review feedback systematically — prioritizes, acknowledges, and resolves each comment without missing anything."
-        },
-        {
-          "id": "skill-parallel-agents",
-          "name": "superpowers:dispatching-parallel-agents",
-          "version": "built-in",
-          "links": [],
-          "notes": "Splits work across multiple subagents running in parallel. Use when independent tasks can be done concurrently to save time."
-        },
-        {
-          "id": "skill-subagent-dev",
-          "name": "superpowers:subagent-driven-development",
-          "version": "built-in",
-          "links": [],
-          "notes": "Executes independent implementation tasks via parallel subagents in the current session. Coordinates multiple streams of work without blocking."
-        }
-      ]
-    },
-    {
-      "id": "installed-skills",
-      "title": "Installed Skills",
-      "order": 16,
       "entries": [
         {
           "id": "skill-vibesec",
           "name": "vibesec",
-          "version": "latest",
           "links": [],
           "notes": "Security review for web applications. Catches OWASP issues, access control flaws, injection vectors, and authentication problems. Trigger: 'audit this for security' or 'scan for vulnerabilities'."
         },
         {
           "id": "skill-varlock",
           "name": "varlock",
-          "version": "latest",
           "links": [],
           "notes": "Secure secrets and environment variable handling. Ensures API keys never appear in terminal output, logs, or Claude's context. Run <code>varlock load</code> to mask secrets; <code>varlock load --quiet</code> to validate silently."
         },
         {
           "id": "skill-xlsx",
           "name": "xlsx",
-          "version": "latest",
           "links": [],
           "notes": "Full spreadsheet operations: create, edit, fix formulas, add columns, build financial models, clean messy data, convert CSV/TSV to .xlsx. Trigger: 'create a spreadsheet with...' or 'fix the formulas in [file].xlsx'."
         },
         {
           "id": "skill-pdf",
           "name": "pdf",
-          "version": "latest",
           "links": [],
           "notes": "Read, extract text/tables, merge, split, rotate, watermark, encrypt, OCR scanned PDFs, and fill forms. Trigger: 'extract text from this PDF' or 'merge these PDFs'."
         },
         {
           "id": "skill-internal-comms",
           "name": "internal-comms",
-          "version": "latest",
           "links": [],
           "notes": "Writes structured internal communications: 3P updates (Progress/Plans/Problems), status reports, leadership updates, company newsletters, incident reports, and FAQs."
         },
         {
           "id": "skill-review-claudemd",
           "name": "review-claudemd",
-          "version": "latest",
           "links": [],
           "notes": "Analyzes recent conversation history to surface improvements for your CLAUDE.md files. Identifies new rules, preferences, and patterns worth codifying."
         },
         {
-          "id": "skill-playwriter",
-          "name": "playwriter",
-          "version": "latest",
-          "links": [],
-          "notes": "Automates your real Chrome browser via Playwright. Handles JS-heavy SPAs, login walls, lazy-loaded UIs, Instagram, Twitter. Uses hook-driven session demux — always start with <code>acquirePage()</code>, then use <code>state.page</code>."
-        },
-        {
           "id": "skill-para-memory",
           "name": "para-memory-files",
-          "version": "latest",
           "links": [],
           "notes": "Persistent cross-session memory using PARA method (Projects/Areas/Resources/Archives). Three layers: knowledge graph with atomic YAML facts, daily notes timeline, and tacit user pattern memory. Also handles weekly synthesis and recall."
-        },
-        {
-          "id": "skill-paperclip",
-          "name": "paperclip",
-          "version": "latest",
-          "links": [],
-          "notes": "Interacts with the Paperclip agent platform API — checks assignments, updates task status, delegates work to other agents, posts comments, and calls any Paperclip API endpoint. Not for domain work itself; only for coordination."
-        },
-        {
-          "id": "skill-paperclip-create-agent",
-          "name": "paperclip-create-agent",
-          "version": "latest",
-          "links": [],
-          "notes": "Hires or configures new agents in Paperclip with governance-aware workflow — inspects adapter options, compares existing configs, drafts agent prompts, and submits hire requests."
-        },
-        {
-          "id": "skill-paperclip-create-plugin",
-          "name": "paperclip-create-plugin",
-          "version": "latest",
-          "links": [],
-          "notes": "Scaffolds new Paperclip plugins using the alpha SDK/runtime. Covers worker/UI surface, route conventions, scaffold flow, and verification steps."
         }
       ]
     },
     {
-      "id": "always-on-skills",
-      "title": "Always-on Skills",
-      "order": 17,
+      "id": "harness-skills",
+      "title": "Harness Skills",
+      "order": 16,
       "entries": [
-        {
-          "id": "skill-frontend-design",
-          "name": "frontend-design",
-          "version": "built-in",
-          "links": [],
-          "notes": "Generates production-quality, distinctive frontend UI — React, Tailwind, shadcn/ui. Avoids generic AI aesthetics. Invoke when building web components, pages, or applications."
-        },
         {
           "id": "skill-claude-api",
           "name": "claude-api",
-          "version": "built-in",
           "links": [],
           "notes": "Builds, debugs, and optimizes Claude API / Anthropic SDK apps. Handles prompt caching, tool use, model migrations (4.5→4.6→4.7), batch, citations, and memory. Auto-includes caching best practices."
         },
         {
           "id": "skill-update-config",
           "name": "update-config",
-          "version": "built-in",
           "links": [],
           "notes": "Edits settings.json, configures hooks, permissions, and env vars. Required for automated behaviors ('whenever X, do Y') — these run in the harness, not in Claude's memory."
         },
         {
           "id": "skill-keybindings",
           "name": "keybindings-help",
-          "version": "built-in",
           "links": [],
           "notes": "Customizes ~/.claude/keybindings.json — rebind keys, add chord shortcuts, change the submit key, or restructure any keyboard binding."
         },
         {
           "id": "skill-simplify",
           "name": "simplify",
-          "version": "built-in",
           "links": [],
           "notes": "Post-implementation code quality review: spots over-engineering, duplication, and inefficiencies, then fixes them. Run after a feature is working to tighten it up."
         },
         {
           "id": "skill-fewer-prompts",
           "name": "fewer-permission-prompts",
-          "version": "built-in",
           "links": [],
           "notes": "Scans conversation transcripts for common read-only Bash and MCP tool calls, then adds a prioritized allowlist to settings.json to reduce repetitive permission dialogs."
         },
         {
           "id": "skill-loop",
           "name": "loop",
-          "version": "built-in",
           "links": [],
           "notes": "Runs a prompt or slash command on a recurring interval (e.g. 'check the build every 5 minutes', 'poll for status'). Self-pacing when no interval is specified."
         },
         {
           "id": "skill-schedule",
           "name": "schedule",
-          "version": "built-in",
           "links": [],
           "notes": "Creates and manages scheduled remote agents on cron schedules. Use for recurring routines, automated tasks, or one-time future runs ('remind me to check X tomorrow')."
         },
         {
           "id": "skill-init",
           "name": "init",
-          "version": "built-in",
           "links": [],
           "notes": "Generates a new CLAUDE.md for a codebase by analyzing its structure, stack, and conventions. Use when onboarding Claude Code to an unfamiliar repo."
         },
         {
           "id": "skill-review",
           "name": "review",
-          "version": "built-in",
           "links": [],
           "notes": "Reviews a pull request — checks for correctness, edge cases, style, and missing test coverage. Invoke when ready for a systematic PR review pass."
         },
         {
           "id": "skill-security-review",
           "name": "security-review",
-          "version": "built-in",
           "links": [],
           "notes": "Dedicated security audit pass — broader than vibesec, covers the full codebase and checks for systemic vulnerabilities, insecure defaults, and misconfigurations."
-        },
-        {
-          "id": "skill-mem-search",
-          "name": "claude-mem:mem-search",
-          "version": "built-in",
-          "links": [],
-          "notes": "Searches persistent cross-session memory database. Use to recall past decisions, solutions, or context from previous sessions."
-        },
-        {
-          "id": "skill-make-plan",
-          "name": "claude-mem:make-plan",
-          "version": "built-in",
-          "links": [],
-          "notes": "Creates a phased implementation plan stored in memory, visible across sessions. Use for multi-day or multi-session projects."
-        },
-        {
-          "id": "skill-do",
-          "name": "claude-mem:do",
-          "version": "built-in",
-          "links": [],
-          "notes": "Executes a plan stored in claude-mem via subagents. Picks up a saved plan and dispatches work to parallel agents."
-        },
-        {
-          "id": "skill-smart-explore",
-          "name": "claude-mem:smart-explore",
-          "version": "built-in",
-          "links": [],
-          "notes": "Token-efficient codebase structure search. Maps a repo's shape without exhausting context — use before diving deep into an unfamiliar codebase."
-        },
-        {
-          "id": "skill-timeline-report",
-          "name": "claude-mem:timeline-report",
-          "version": "built-in",
-          "links": [],
-          "notes": "Generates a full project development history report from claude-mem's observation log — all decisions, features, bugs, and milestones in chronological order."
-        },
-        {
-          "id": "skill-hud-setup",
-          "name": "claude-hud:setup",
-          "version": "built-in",
-          "links": [],
-          "notes": "Configures claude-hud as a statusline in the Claude Code terminal — shows model, token usage, cost, and session info in real time."
-        },
-        {
-          "id": "skill-hud-configure",
-          "name": "claude-hud:configure",
-          "version": "built-in",
-          "links": [],
-          "notes": "Adjusts claude-hud layout, display language, and presets. Fine-tune what appears in the statusline and how it's formatted."
         }
       ]
     }
