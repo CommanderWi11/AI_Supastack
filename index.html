@@ -330,6 +330,30 @@
 
     .notes-cell { min-width: 200px; }
 
+    .sub-entries {
+      margin: 10px 0 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--border-muted);
+    }
+    .sub-entry {
+      padding: 6px 0 6px 12px;
+      border-bottom: 1px solid var(--border-muted);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .sub-entry:last-child { border-bottom: none; }
+    .sub-entry-name {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .sub-entry-notes { flex: 1; }
+
     .notes-details summary {
       cursor: pointer;
       font-size: 12px;
@@ -1396,6 +1420,17 @@ async function initAuth() {
     </details>`;
   }
 
+  function renderSubEntries(subEntries) {
+    if (!subEntries || subEntries.length === 0) return '';
+    const items = subEntries.map(s =>
+      `<li class="sub-entry">
+        <span class="sub-entry-name">${escHtml(s.id)}</span>
+        <span class="sub-entry-notes">${s.notes ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(s.notes) : s.notes) : ''}</span>
+      </li>`
+    ).join('');
+    return `<ul class="sub-entries">${items}</ul>`;
+  }
+
   function renderEntry(entry, sectionId) {
     return `<tr class="entry-row" id="entry-${escHtml(entry.id)}">
       <td>
@@ -1403,7 +1438,7 @@ async function initAuth() {
         ${entry.version ? `<div class="entry-version">${escHtml(entry.version)}</div>` : ''}
       </td>
       <td class="links-cell">${renderLinks(entry.links)}</td>
-      <td class="notes-cell">${renderNotes(entry.notes)}</td>
+      <td class="notes-cell">${renderNotes(entry.notes)}${renderSubEntries(entry.subEntries)}</td>
       <td style="width:1px;white-space:nowrap">
         <div class="edit-controls" data-entry-id="${escHtml(entry.id)}" data-section-id="${escHtml(sectionId)}">
           <button class="btn-edit" onclick="startEditEntry('${escHtml(sectionId)}', '${escHtml(entry.id)}')">Edit</button>
@@ -1713,13 +1748,24 @@ function renderAll(data) {
     if (!notes) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
     return '<details class="notes-details"><summary>notes</summary><div class="notes-content">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes) + '</div></details>';
   }
+  function _renderSubEntries(subEntries) {
+    if (!subEntries || subEntries.length === 0) return '';
+    var items = subEntries.map(function(s) {
+      return '<li class="sub-entry">' +
+        '<span class="sub-entry-name">' + _escHtml(s.id) + '</span>' +
+        '<span class="sub-entry-notes">' + (s.notes ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(s.notes) : s.notes) : '') + '</span>' +
+        '</li>';
+    }).join('');
+    return '<ul class="sub-entries">' + items + '</ul>';
+  }
+
   function _renderEntry(entry, sectionId) {
     return '<tr class="entry-row" id="entry-' + _escHtml(entry.id) + '">' +
       '<td><div class="entry-name">' + _escHtml(entry.name) + '</div>' +
       (entry.version ? '<div class="entry-version">' + _escHtml(entry.version) + '</div>' : '') +
       '</td>' +
       '<td class="links-cell">' + _renderLinks(entry.links) + '</td>' +
-      '<td class="notes-cell">' + _renderNotes(entry.notes) + '</td>' +
+      '<td class="notes-cell">' + _renderNotes(entry.notes) + _renderSubEntries(entry.subEntries) + '</td>' +
       '<td style="width:1px;white-space:nowrap">' +
         '<div class="edit-controls" data-entry-id="' + _escHtml(entry.id) + '" data-section-id="' + _escHtml(sectionId) + '">' +
           '<button class="btn-edit" onclick="startEditEntry(\'' + _escHtml(sectionId) + '\', \'' + _escHtml(entry.id) + '\')">Edit</button>' +
