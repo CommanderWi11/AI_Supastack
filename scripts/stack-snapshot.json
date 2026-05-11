@@ -1,0 +1,51 @@
+{
+  "capturedAt": "2026-05-11T09:53:28Z",
+  "brew": {},
+  "brewCasks": {
+    "font-jetbrains-mono": "2.304",
+    "gcloud-cli": "563.0.0",
+    "ghostty": "1.3.1",
+    "iterm2": "3.6.9",
+    "nomachine": "9.4.14_1",
+    "opensuperwhisper": "0.1.0",
+    "tailscale-app": "1.96.5"
+  },
+  "npm": {
+    "@openai/codex": "0.125.0",
+    "@playwright/cli": "0.1.11",
+    "clawhub": "0.9.0",
+    "gmail-mcp-server": "1.0.30",
+    "npm": "11.12.1",
+    "openclaw": "2026.4.9",
+    "playwright": "1.59.1",
+    "playwriter": "0.1.0",
+    "pnpm": "10.33.0",
+    "vercel": "53.1.0"
+  },
+  "claudePlugins": [
+    "claude-hud/claude-hud",
+    "claude-plugins-official/frontend-design",
+    "claude-plugins-official/superpowers",
+    "claude-plugins-official/vercel",
+    "thedotmack/claude-mem"
+  ],
+  "claudeSkills": [
+    "internal-comms",
+    "paperclip",
+    "paperclip-create-agent",
+    "paperclip-create-plugin",
+    "para-memory-files",
+    "pdf",
+    "playwriter",
+    "review-claudemd",
+    "varlock",
+    "vibesec",
+    "xlsx"
+  ],
+  "mcpServers": [
+    "firecrawl",
+    "gmail",
+    "guesty",
+    "notion"
+  ]
+}
