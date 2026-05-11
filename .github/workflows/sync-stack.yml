@@ -1,0 +1,35 @@
+name: Sync Stack
+
+on:
+  schedule:
+    - cron: '0 8 * * 0'   # Sundays 8am UTC
+  workflow_dispatch:        # Manual trigger via GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run sync
+        run: node scripts/sync-stack.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet index.html; then
+            git add index.html
+            git commit -F /tmp/sync-commit-msg.txt
+            git push
+          else
+            echo "No changes to index.html — skipping commit"
+          fi
