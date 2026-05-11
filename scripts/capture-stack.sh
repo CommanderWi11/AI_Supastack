@@ -18,7 +18,7 @@ installed = f.get('installed', [])
 print(installed[0].get('version', '') if installed else '')
 " 2>/dev/null || true)
   [ -n "$ver" ] && printf '"%s": "%s",' "$formula" "$ver"
-done | sed 's/,$//')
+done | sed 's/,$//' || true)
 brew_obj="{$brew_json}"
 
 # --- brew casks ---
@@ -26,7 +26,7 @@ cask_json=$(brew list --cask --versions 2>/dev/null | while read -r line; do
   cask=$(echo "$line" | awk '{print $1}')
   ver=$(echo "$line" | awk '{print $2}')
   printf '"%s": "%s",' "$cask" "$ver"
-done | sed 's/,$//')
+done | sed 's/,$//' || true)
 cask_obj="{$cask_json}"
 
 # --- npm globals (exclude symlinked local packages) ---
