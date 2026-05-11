@@ -1,5 +1,5 @@
 {
-  "homebrew":    { "type": "brew",      "formula": "brew" },
+  "homebrew":    { "type": "github",    "repo": "Homebrew/brew" },
   "ghostty":     { "type": "brew-cask", "cask": "ghostty" },
   "cursor":      { "type": "brew-cask", "cask": "cursor" },
   "claude-code": { "type": "npm",       "package": "@anthropic-ai/claude-code" },
@@ -9,7 +9,7 @@
   "deno":        { "type": "brew",      "formula": "deno" },
   "uv":          { "type": "brew",      "formula": "uv" },
   "gh":          { "type": "brew",      "formula": "gh" },
-  "gcloud":      { "type": "brew-cask", "cask": "google-cloud-sdk" },
+  "gcloud":      { "type": "brew-cask", "cask": "gcloud-cli" },
   "fzf":         { "type": "brew",      "formula": "fzf" },
   "ffmpeg":      { "type": "brew",      "formula": "ffmpeg" },
   "yt-dlp":      { "type": "brew",      "formula": "yt-dlp" },
