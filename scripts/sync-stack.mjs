@@ -10,14 +10,14 @@ const ROOT = path.resolve(__dirname, '..');
 // ---------------------------------------------------------------------------
 
 export function parseHtmlJson(html) {
-  const match = html.match(/<script type="application\/json">([\s\S]*?)<\/script>/);
+  const match = html.match(/<script type="application\/json"[^>]*>([\s\S]*?)<\/script>/);
   if (!match) throw new Error('JSON block not found in HTML');
   return JSON.parse(match[1]);
 }
 
 export function injectHtmlJson(html, data) {
   return html.replace(
-    /(<script type="application\/json">)([\s\S]*?)(<\/script>)/,
+    /(<script type="application\/json"[^>]*>)([\s\S]*?)(<\/script>)/,
     (_, open, _content, close) => `${open}\n${JSON.stringify(data, null, 2)}\n${close}`
   );
 }

@@ -484,8 +484,14 @@
           "name": "Homebrew",
           "version": "latest",
           "links": [
-            { "label": "Install", "url": "https://brew.sh" },
-            { "label": "Docs", "url": "https://docs.brew.sh" }
+            {
+              "label": "Install",
+              "url": "https://brew.sh"
+            },
+            {
+              "label": "Docs",
+              "url": "https://docs.brew.sh"
+            }
           ],
           "notes": "The missing package manager for macOS. Install first — everything else depends on it. Run: <code>/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"</code>"
         }
@@ -499,10 +505,16 @@
         {
           "id": "ghostty",
           "name": "Ghostty",
-          "version": "latest",
+          "version": "1.3.1",
           "links": [
-            { "label": "Site", "url": "https://ghostty.org" },
-            { "label": "Docs", "url": "https://ghostty.org/docs" }
+            {
+              "label": "Site",
+              "url": "https://ghostty.org"
+            },
+            {
+              "label": "Docs",
+              "url": "https://ghostty.org/docs"
+            }
           ],
           "notes": "Fast, native terminal emulator. Primary terminal. Download from the site or: <code>brew install --cask ghostty</code>"
         }
@@ -516,20 +528,32 @@
         {
           "id": "cursor",
           "name": "Cursor",
-          "version": "latest",
+          "version": "3.3.30,3dc559280adc5f931ade8e25c7b85393842acf34",
           "links": [
-            { "label": "Site", "url": "https://cursor.com" },
-            { "label": "Docs", "url": "https://docs.cursor.com" }
+            {
+              "label": "Site",
+              "url": "https://cursor.com"
+            },
+            {
+              "label": "Docs",
+              "url": "https://docs.cursor.com"
+            }
           ],
           "notes": "AI-first code editor built on VS Code. Inline AI editing, codebase chat, and agentic coding. Install: <code>brew install --cask cursor</code>"
         },
         {
           "id": "obsidian",
           "name": "Obsidian",
-          "version": "latest",
+          "version": "1.12.7",
           "links": [
-            { "label": "Site", "url": "https://obsidian.md" },
-            { "label": "Download", "url": "https://obsidian.md/download" }
+            {
+              "label": "Site",
+              "url": "https://obsidian.md"
+            },
+            {
+              "label": "Download",
+              "url": "https://obsidian.md/download"
+            }
           ],
           "notes": "Local-first markdown knowledge base — used as the persistent memory layer (AI Brain vault). All notes are plain <code>.md</code> files stored in iCloud. Install: <code>brew install --cask obsidian</code>"
         }
@@ -543,40 +567,64 @@
         {
           "id": "nodejs",
           "name": "Node.js",
-          "version": "v25.9.0",
+          "version": "26.0.0",
           "links": [
-            { "label": "Site", "url": "https://nodejs.org" },
-            { "label": "Install", "url": "https://nodejs.org/en/download" }
+            {
+              "label": "Site",
+              "url": "https://nodejs.org"
+            },
+            {
+              "label": "Install",
+              "url": "https://nodejs.org/en/download"
+            }
           ],
           "notes": "JavaScript runtime — required for Claude Code, MCP servers, and most tooling. Install: <code>brew install node</code>"
         },
         {
           "id": "python",
           "name": "Python",
-          "version": "3.14",
+          "version": "3.14.4",
           "links": [
-            { "label": "Site", "url": "https://python.org" },
-            { "label": "Downloads", "url": "https://www.python.org/downloads" }
+            {
+              "label": "Site",
+              "url": "https://python.org"
+            },
+            {
+              "label": "Downloads",
+              "url": "https://www.python.org/downloads"
+            }
           ],
           "notes": "Python interpreter. Install: <code>brew install python@3.14</code>. Use <code>uv</code> for project-level venv management."
         },
         {
           "id": "deno",
           "name": "Deno",
-          "version": "2.7.9",
+          "version": "2.7.14",
           "links": [
-            { "label": "Site", "url": "https://deno.com" },
-            { "label": "Docs", "url": "https://docs.deno.com" }
+            {
+              "label": "Site",
+              "url": "https://deno.com"
+            },
+            {
+              "label": "Docs",
+              "url": "https://docs.deno.com"
+            }
           ],
           "notes": "Secure TypeScript/JS runtime with built-in tooling. Install: <code>brew install deno</code>"
         },
         {
           "id": "uv",
           "name": "uv",
-          "version": "latest",
+          "version": "0.11.13",
           "links": [
-            { "label": "Repo", "url": "https://github.com/astral-sh/uv" },
-            { "label": "Docs", "url": "https://docs.astral.sh/uv" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/astral-sh/uv"
+            },
+            {
+              "label": "Docs",
+              "url": "https://docs.astral.sh/uv"
+            }
           ],
           "notes": "Extremely fast Python package and project manager (Rust-based). Replaces pip/venv/poetry. Install: <code>brew install uv</code>"
         }
@@ -590,10 +638,16 @@
         {
           "id": "gh",
           "name": "gh (GitHub CLI)",
-          "version": "2.89.0",
+          "version": "2.92.0",
           "links": [
-            { "label": "Site", "url": "https://cli.github.com" },
-            { "label": "Manual", "url": "https://cli.github.com/manual" }
+            {
+              "label": "Site",
+              "url": "https://cli.github.com"
+            },
+            {
+              "label": "Manual",
+              "url": "https://cli.github.com/manual"
+            }
           ],
           "notes": "Official GitHub CLI — create repos, PRs, manage Actions, etc. Install: <code>brew install gh</code> then <code>gh auth login</code>"
         },
@@ -602,27 +656,42 @@
           "name": "gcloud",
           "version": "latest",
           "links": [
-            { "label": "Site", "url": "https://cloud.google.com/sdk" },
-            { "label": "Docs", "url": "https://cloud.google.com/sdk/docs/install" }
+            {
+              "label": "Site",
+              "url": "https://cloud.google.com/sdk"
+            },
+            {
+              "label": "Docs",
+              "url": "https://cloud.google.com/sdk/docs/install"
+            }
           ],
           "notes": "Google Cloud SDK CLI. Install: <code>brew install --cask google-cloud-sdk</code> then <code>gcloud auth login</code>"
         },
         {
           "id": "fzf",
           "name": "fzf",
-          "version": "0.70.0",
+          "version": "0.72.0",
           "links": [
-            { "label": "Repo", "url": "https://github.com/junegunn/fzf" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/junegunn/fzf"
+            }
           ],
           "notes": "Fuzzy finder for shell history, file search, and piped input. Install: <code>brew install fzf</code>"
         },
         {
           "id": "ffmpeg",
           "name": "ffmpeg",
-          "version": "8.1",
+          "version": "8.1.1",
           "links": [
-            { "label": "Site", "url": "https://ffmpeg.org" },
-            { "label": "Repo", "url": "https://github.com/FFmpeg/FFmpeg" }
+            {
+              "label": "Site",
+              "url": "https://ffmpeg.org"
+            },
+            {
+              "label": "Repo",
+              "url": "https://github.com/FFmpeg/FFmpeg"
+            }
           ],
           "notes": "Audio/video processing toolkit. Required by yt-dlp and Whisper workflows. Install: <code>brew install ffmpeg</code>"
         },
@@ -631,16 +700,22 @@
           "name": "yt-dlp",
           "version": "2026.3.17",
           "links": [
-            { "label": "Repo", "url": "https://github.com/yt-dlp/yt-dlp" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/yt-dlp/yt-dlp"
+            }
           ],
           "notes": "Download video/audio from YouTube and 1000+ sites. Requires ffmpeg. Install: <code>brew install yt-dlp</code>"
         },
         {
           "id": "sqlite",
           "name": "SQLite",
-          "version": "latest",
+          "version": "3.53.0",
           "links": [
-            { "label": "Site", "url": "https://sqlite.org" }
+            {
+              "label": "Site",
+              "url": "https://sqlite.org"
+            }
           ],
           "notes": "Lightweight embedded SQL database engine. Often pre-installed on macOS; keep it fresh: <code>brew install sqlite</code>"
         }
@@ -654,47 +729,68 @@
         {
           "id": "claude-code",
           "name": "Claude Code",
-          "version": "v2.1.104",
+          "version": "2.1.138",
           "links": [
-            { "label": "Site", "url": "https://claude.ai/code" },
-            { "label": "Docs", "url": "https://docs.anthropic.com/en/docs/claude-code" }
+            {
+              "label": "Site",
+              "url": "https://claude.ai/code"
+            },
+            {
+              "label": "Docs",
+              "url": "https://docs.anthropic.com/en/docs/claude-code"
+            }
           ],
           "notes": "Anthropic's agentic AI coding CLI. Primary AI assistant. Install: <code>npm install -g @anthropic-ai/claude-code</code>"
         },
         {
           "id": "ollama",
           "name": "Ollama",
-          "version": "v0.19.0",
+          "version": "v0.23.2",
           "links": [
-            { "label": "Site", "url": "https://ollama.com" },
-            { "label": "Docs", "url": "https://github.com/ollama/ollama" }
+            {
+              "label": "Site",
+              "url": "https://ollama.com"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/ollama/ollama"
+            }
           ],
           "notes": "Run large language models locally. Active model: <code>qwen2.5:14b</code>. Install: <code>brew install ollama</code> then <code>ollama pull qwen2.5:14b</code>"
         },
         {
           "id": "mlx",
           "name": "MLX / MLX-C",
-          "version": "latest",
+          "version": "0.31.2",
           "links": [
-            { "label": "Repo", "url": "https://github.com/ml-explore/mlx" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/ml-explore/mlx"
+            }
           ],
           "notes": "Apple's ML framework optimised for Apple Silicon. C bindings via MLX-C. Install: <code>brew install mlx mlx-c</code>"
         },
         {
           "id": "whisper",
           "name": "Whisper (whisper-cpp)",
-          "version": "latest",
+          "version": "1.8.4",
           "links": [
-            { "label": "Repo", "url": "https://github.com/ggerganov/whisper.cpp" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/ggerganov/whisper.cpp"
+            }
           ],
           "notes": "OpenAI Whisper speech-to-text, C++ port optimised for Apple Silicon. Requires ffmpeg. Install: <code>brew install whisper-cpp</code>"
         },
         {
           "id": "ggml",
           "name": "GGML",
-          "version": "latest",
+          "version": "0.11.1",
           "links": [
-            { "label": "Repo", "url": "https://github.com/ggerganov/ggml" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/ggerganov/ggml"
+            }
           ],
           "notes": "Tensor library for ML inference — underpins llama.cpp and whisper.cpp. Install: <code>brew install ggml</code>"
         }
@@ -709,7 +805,10 @@
           "id": "bmad-method",
           "name": "BMAD-METHOD",
           "links": [
-            { "label": "Repo", "url": "https://github.com/bmad-code-org/BMAD-METHOD" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/bmad-code-org/BMAD-METHOD"
+            }
           ],
           "notes": "Breakthrough Method for Agile AI-Driven Development. Structured framework that uses 12+ specialized agent personas (analyst, architect, PM, dev, etc.) to guide the full dev lifecycle — from discovery through implementation. Solves the problem of shallow AI output by enforcing proven agile practices at each phase. Free and open-source."
         }
@@ -724,66 +823,138 @@
           "id": "plugin-superpowers",
           "name": "superpowers",
           "links": [
-            { "label": "Repo", "url": "https://github.com/anthropics/claude-code" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/anthropics/claude-code"
+            }
           ],
           "notes": "Official Anthropic plugin — adds planning, brainstorm, debugging, and systematic workflow skills. Install: <code>@claude-plugins-official/superpowers</code>",
           "subEntries": [
-            { "id": "superpowers:brainstorming", "notes": "Explores intent, design, and tradeoffs before any feature implementation. Invoke before building." },
-            { "id": "superpowers:test-driven-development", "notes": "Enforces TDD discipline — writes tests before implementation code." },
-            { "id": "superpowers:systematic-debugging", "notes": "Structured debugging protocol. Diagnoses root cause before proposing fixes." },
-            { "id": "superpowers:writing-plans", "notes": "Converts a spec into a phased, reviewable implementation plan." },
-            { "id": "superpowers:executing-plans", "notes": "Executes a written plan in a new session with review checkpoints." },
-            { "id": "superpowers:verification-before-completion", "notes": "Requires running verification commands before claiming work is done." },
-            { "id": "superpowers:finishing-a-development-branch", "notes": "Wraps up a feature branch — cleanup, tests, changelog, PR prep." },
-            { "id": "superpowers:using-git-worktrees", "notes": "Isolates feature work in a git worktree so the main workspace stays clean." },
-            { "id": "superpowers:requesting-code-review", "notes": "Prepares code for peer review — structures the PR, highlights decisions, identifies risk areas." },
-            { "id": "superpowers:receiving-code-review", "notes": "Guides acting on review feedback systematically." },
-            { "id": "superpowers:dispatching-parallel-agents", "notes": "Splits work across multiple subagents running in parallel." },
-            { "id": "superpowers:subagent-driven-development", "notes": "Executes independent implementation tasks via parallel subagents." }
+            {
+              "id": "superpowers:brainstorming",
+              "notes": "Explores intent, design, and tradeoffs before any feature implementation. Invoke before building."
+            },
+            {
+              "id": "superpowers:test-driven-development",
+              "notes": "Enforces TDD discipline — writes tests before implementation code."
+            },
+            {
+              "id": "superpowers:systematic-debugging",
+              "notes": "Structured debugging protocol. Diagnoses root cause before proposing fixes."
+            },
+            {
+              "id": "superpowers:writing-plans",
+              "notes": "Converts a spec into a phased, reviewable implementation plan."
+            },
+            {
+              "id": "superpowers:executing-plans",
+              "notes": "Executes a written plan in a new session with review checkpoints."
+            },
+            {
+              "id": "superpowers:verification-before-completion",
+              "notes": "Requires running verification commands before claiming work is done."
+            },
+            {
+              "id": "superpowers:finishing-a-development-branch",
+              "notes": "Wraps up a feature branch — cleanup, tests, changelog, PR prep."
+            },
+            {
+              "id": "superpowers:using-git-worktrees",
+              "notes": "Isolates feature work in a git worktree so the main workspace stays clean."
+            },
+            {
+              "id": "superpowers:requesting-code-review",
+              "notes": "Prepares code for peer review — structures the PR, highlights decisions, identifies risk areas."
+            },
+            {
+              "id": "superpowers:receiving-code-review",
+              "notes": "Guides acting on review feedback systematically."
+            },
+            {
+              "id": "superpowers:dispatching-parallel-agents",
+              "notes": "Splits work across multiple subagents running in parallel."
+            },
+            {
+              "id": "superpowers:subagent-driven-development",
+              "notes": "Executes independent implementation tasks via parallel subagents."
+            }
           ]
         },
         {
           "id": "plugin-frontend-design",
           "name": "frontend-design",
           "links": [
-            { "label": "Plugin Store", "url": "https://github.com/anthropics/claude-code" }
+            {
+              "label": "Plugin Store",
+              "url": "https://github.com/anthropics/claude-code"
+            }
           ],
           "notes": "Official Anthropic plugin — high-quality frontend design generation skill. Install: <code>@claude-plugins-official/frontend-design</code>",
           "subEntries": [
-            { "id": "frontend-design:frontend-design", "notes": "Generates production-quality, distinctive frontend UI. Avoids generic AI aesthetics. Invoke when building web components, pages, or applications." }
+            {
+              "id": "frontend-design:frontend-design",
+              "notes": "Generates production-quality, distinctive frontend UI. Avoids generic AI aesthetics. Invoke when building web components, pages, or applications."
+            }
           ]
         },
         {
           "id": "plugin-claude-mem",
           "name": "claude-mem",
           "links": [
-            { "label": "Repo", "url": "https://github.com/thedotmack/claude-mem" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/thedotmack/claude-mem"
+            }
           ],
           "notes": "Persistent cross-session memory for Claude Code. Enables knowledge graphs, corpus search, timeline, and smart exploration. Install: <code>@thedotmack/claude-mem</code>",
           "subEntries": [
-            { "id": "claude-mem:mem-search", "notes": "Searches persistent cross-session memory database. Recall past decisions, solutions, or context." },
-            { "id": "claude-mem:make-plan", "notes": "Creates a phased implementation plan stored in memory, visible across sessions." },
-            { "id": "claude-mem:do", "notes": "Executes a plan stored in claude-mem via subagents." },
-            { "id": "claude-mem:smart-explore", "notes": "Token-efficient codebase structure search. Maps a repo's shape without exhausting context." },
-            { "id": "claude-mem:timeline-report", "notes": "Generates a full project development history report from claude-mem's observation log." }
+            {
+              "id": "claude-mem:mem-search",
+              "notes": "Searches persistent cross-session memory database. Recall past decisions, solutions, or context."
+            },
+            {
+              "id": "claude-mem:make-plan",
+              "notes": "Creates a phased implementation plan stored in memory, visible across sessions."
+            },
+            {
+              "id": "claude-mem:do",
+              "notes": "Executes a plan stored in claude-mem via subagents."
+            },
+            {
+              "id": "claude-mem:smart-explore",
+              "notes": "Token-efficient codebase structure search. Maps a repo's shape without exhausting context."
+            },
+            {
+              "id": "claude-mem:timeline-report",
+              "notes": "Generates a full project development history report from claude-mem's observation log."
+            }
           ]
         },
         {
           "id": "plugin-playwright-pro",
           "name": "Playwright Pro",
           "links": [
-            { "label": "Plugin Hub", "url": "https://www.claudepluginhub.com/plugins/alirezarezvani-pw-engineering-team-playwright-pro" }
+            {
+              "label": "Plugin Hub",
+              "url": "https://www.claudepluginhub.com/plugins/alirezarezvani-pw-engineering-team-playwright-pro"
+            }
           ],
           "notes": "Automates the full Playwright E2E testing lifecycle: generates tests from user stories, URLs, or codebases; migrates Cypress/Selenium suites; diagnoses and fixes flaky failures; reviews for best practices and coverage; produces Markdown/HTML/Slack reports.",
           "subEntries": [
-            { "id": "playwriter", "notes": "Controls your real Chrome browser via Playwright. Hook-driven: start with <code>acquirePage()</code>, use <code>state.page</code>. Handles JS-heavy SPAs, login walls, lazy-loaded UIs." }
+            {
+              "id": "playwriter",
+              "notes": "Controls your real Chrome browser via Playwright. Hook-driven: start with <code>acquirePage()</code>, use <code>state.page</code>. Handles JS-heavy SPAs, login walls, lazy-loaded UIs."
+            }
           ]
         },
         {
           "id": "plugin-psychologist-analyst",
           "name": "psychologist-analyst",
           "links": [
-            { "label": "Smithery", "url": "https://smithery.ai/skills/rysweet/psychologist-analyst" }
+            {
+              "label": "Smithery",
+              "url": "https://smithery.ai/skills/rysweet/psychologist-analyst"
+            }
           ],
           "notes": "Claude Code skill by rysweet — analyzes writing, journaling, and conversations for emotional patterns, mental state indicators, and behavioural insights. Install via Smithery."
         },
@@ -791,12 +962,21 @@
           "id": "plugin-claude-hud",
           "name": "claude-hud",
           "links": [
-            { "label": "Plugin Hub", "url": "https://github.com/disler/claude-hud" }
+            {
+              "label": "Plugin Hub",
+              "url": "https://github.com/disler/claude-hud"
+            }
           ],
           "notes": "Status-bar HUD for Claude Code — shows model, token usage, cost, and session info in real time. Install: <code>@claude-hud/claude-hud</code>",
           "subEntries": [
-            { "id": "claude-hud:setup", "notes": "Configures claude-hud as a statusline in the Claude Code terminal." },
-            { "id": "claude-hud:configure", "notes": "Adjusts claude-hud layout, display language, and presets." }
+            {
+              "id": "claude-hud:setup",
+              "notes": "Configures claude-hud as a statusline in the Claude Code terminal."
+            },
+            {
+              "id": "claude-hud:configure",
+              "notes": "Adjusts claude-hud layout, display language, and presets."
+            }
           ]
         }
       ]
@@ -811,7 +991,10 @@
           "name": "Notion MCP",
           "version": "latest",
           "links": [
-            { "label": "Repo", "url": "https://github.com/makenotion/notion-mcp-server" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/makenotion/notion-mcp-server"
+            }
           ],
           "notes": "Official Notion MCP server. Connects Claude Code to Airnest workspace via bot \"Cloude Connection Luis\". Run via Claude Code settings: <code>npx @notionhq/notion-mcp-server</code>. Set <code>NOTION_API_KEY</code> env var."
         },
@@ -820,7 +1003,10 @@
           "name": "Canva MCP",
           "version": "latest",
           "links": [
-            { "label": "Developers", "url": "https://www.canva.com/developers" }
+            {
+              "label": "Developers",
+              "url": "https://www.canva.com/developers"
+            }
           ],
           "notes": "Canva design integration — create, edit, export designs from Claude Code. Available via claude.ai MCP integration settings."
         },
@@ -829,7 +1015,10 @@
           "name": "Google Drive MCP",
           "version": "latest",
           "links": [
-            { "label": "Google Drive API", "url": "https://developers.google.com/drive/api/guides/about-sdk" }
+            {
+              "label": "Google Drive API",
+              "url": "https://developers.google.com/drive/api/guides/about-sdk"
+            }
           ],
           "notes": "Google Drive file access from Claude Code. Available via claude.ai MCP integration settings. Authenticate with <code>mcp__claude_ai_Google_Drive__authenticate</code>."
         }
@@ -857,9 +1046,12 @@
         {
           "id": "himalaya",
           "name": "Himalaya",
-          "version": "latest",
+          "version": "1.2.0",
           "links": [
-            { "label": "Repo", "url": "https://github.com/soywod/himalaya" }
+            {
+              "label": "Repo",
+              "url": "https://github.com/soywod/himalaya"
+            }
           ],
           "notes": "Terminal email client (IMAP/SMTP). Install: <code>brew install himalaya</code>. Config at <code>~/.config/himalaya/config.toml</code>."
         }
@@ -873,10 +1065,16 @@
         {
           "id": "tailscale",
           "name": "Tailscale",
-          "version": "latest",
+          "version": "1.96.5",
           "links": [
-            { "label": "Site", "url": "https://tailscale.com" },
-            { "label": "KB", "url": "https://tailscale.com/kb" }
+            {
+              "label": "Site",
+              "url": "https://tailscale.com"
+            },
+            {
+              "label": "KB",
+              "url": "https://tailscale.com/kb"
+            }
           ],
           "notes": "Zero-config VPN mesh network. Access any machine in your Tailnet by hostname. Install: <code>brew install --cask tailscale</code>"
         }
@@ -892,20 +1090,38 @@
           "name": "Supabase",
           "version": "latest",
           "links": [
-            { "label": "Site", "url": "https://supabase.com" },
-            { "label": "Docs", "url": "https://supabase.com/docs" },
-            { "label": "Dashboard", "url": "https://app.supabase.com" }
+            {
+              "label": "Site",
+              "url": "https://supabase.com"
+            },
+            {
+              "label": "Docs",
+              "url": "https://supabase.com/docs"
+            },
+            {
+              "label": "Dashboard",
+              "url": "https://app.supabase.com"
+            }
           ],
           "notes": "Open-source Firebase alternative — Postgres database, auth, edge functions, realtime, and storage. Used across multiple projects (whoop-whatsapp, PilotFinance, ai-supastack auth). Create a free project at app.supabase.com."
         },
         {
           "id": "vercel",
           "name": "Vercel",
-          "version": "latest",
+          "version": "53.3.2",
           "links": [
-            { "label": "Site", "url": "https://vercel.com" },
-            { "label": "Dashboard", "url": "https://vercel.com/dashboard" },
-            { "label": "CLI Docs", "url": "https://vercel.com/docs/cli" }
+            {
+              "label": "Site",
+              "url": "https://vercel.com"
+            },
+            {
+              "label": "Dashboard",
+              "url": "https://vercel.com/dashboard"
+            },
+            {
+              "label": "CLI Docs",
+              "url": "https://vercel.com/docs/cli"
+            }
           ],
           "notes": "Serverless deployment platform for Next.js and static sites. Used to deploy whoop-whatsapp and other web apps. Install CLI: <code>npm i -g vercel</code> then <code>vercel login</code>."
         },
@@ -914,9 +1130,18 @@
           "name": "Resend",
           "version": "latest",
           "links": [
-            { "label": "Site", "url": "https://resend.com" },
-            { "label": "Docs", "url": "https://resend.com/docs" },
-            { "label": "Dashboard", "url": "https://resend.com/emails" }
+            {
+              "label": "Site",
+              "url": "https://resend.com"
+            },
+            {
+              "label": "Docs",
+              "url": "https://resend.com/docs"
+            },
+            {
+              "label": "Dashboard",
+              "url": "https://resend.com/emails"
+            }
           ],
           "notes": "Email API built for developers. Used to send transactional and automated emails (e.g. WHOOP health reports). Install SDK: <code>npm install resend</code>. Set <code>RESEND_API_KEY</code> env var."
         },
@@ -924,13 +1149,25 @@
           "id": "paperclip",
           "name": "Paperclip",
           "links": [
-            { "label": "Docs", "url": "https://paperclip.sh" }
+            {
+              "label": "Docs",
+              "url": "https://paperclip.sh"
+            }
           ],
           "notes": "AI agent governance and coordination platform — manages tasks, agents, and workflows across sessions. Interacts via three bundled skills.",
           "subEntries": [
-            { "id": "paperclip", "notes": "Interacts with the Paperclip API — checks assignments, updates task status, delegates work, posts comments." },
-            { "id": "paperclip-create-agent", "notes": "Hires or configures new agents with governance-aware workflow — inspects adapters, drafts prompts, submits hire requests." },
-            { "id": "paperclip-create-plugin", "notes": "Scaffolds new Paperclip plugins using the alpha SDK/runtime. Covers worker/UI surface, route conventions, and verification." }
+            {
+              "id": "paperclip",
+              "notes": "Interacts with the Paperclip API — checks assignments, updates task status, delegates work, posts comments."
+            },
+            {
+              "id": "paperclip-create-agent",
+              "notes": "Hires or configures new agents with governance-aware workflow — inspects adapters, drafts prompts, submits hire requests."
+            },
+            {
+              "id": "paperclip-create-plugin",
+              "notes": "Scaffolds new Paperclip plugins using the alpha SDK/runtime. Covers worker/UI surface, route conventions, and verification."
+            }
           ]
         }
       ]
@@ -944,7 +1181,10 @@
           "id": "whoop-whatsapp",
           "name": "WHOOP Daily Briefing",
           "links": [
-            { "label": "Guide", "url": "whoop-guide.html" }
+            {
+              "label": "Guide",
+              "url": "whoop-guide.html"
+            }
           ],
           "notes": "Automated WHOOP health report delivered to WhatsApp each morning. Built on Next.js + Supabase Edge Functions + Resend. An OpenClaw agent reads the email report and replies via WhatsApp. See the guide for full setup instructions."
         }
@@ -1068,7 +1308,7 @@
     }
   ],
   "meta": {
-    "lastUpdated": "2026-05-10",
+    "lastUpdated": "2026-05-11",
     "owner": "CommanderWi11"
   }
 }
