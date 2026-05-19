@@ -1,4 +1,4 @@
-# ai-supastack Memory
+# AI_Supastack Memory
 
 Last reviewed: 2026-05-11
 
@@ -7,12 +7,12 @@ Last reviewed: 2026-05-11
 - **Status:** Active
 - **Goal:** Single-page reference for my AI software stack, auto-synced weekly
 - **Audience:** Me + collaborators
-- **Hosting:** GitHub Pages — `commanderwi11.github.io/ai-supastack/`
-- **Repo:** `CommanderWi11/ai-supastack`
+- **Hosting:** GitHub Pages — `commanderwi11.github.io/AI_Supastack/`
+- **Repo:** `CommanderWi11/AI_Supastack`
 
 ## Recent decisions
 
-- Migrated into `01_Personal_HQ/Projects/ai-supastack/` on 2026-05-03 (was at root `ai-supastack/`).
+- Migrated into `01_Personal_HQ/Projects/ai-supastack/` on 2026-05-03 (was at root `ai-supastack/`). Reorganized into `01_Personal_HQ/Projects/Knowledge_HQ/AI_Supastack/` on 2026-05-19.
 - Design spec relocated from `docs/superpowers/specs/2026-05-01-ai-stack-page-design.md` to `docs/ai-stack-page-design.md` here.
 - Format: single HTML file, wiki-style (option C from original brainstorm)
 - Auth: GitHub OAuth via Supabase

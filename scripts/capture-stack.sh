@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_DIR="/Users/openbob/Library/Mobile Documents/com~apple~CloudDocs/AI Coworking/01_Personal_HQ/Projects/ai-supastack"
+REPO_DIR="/Users/openbob/Library/Mobile Documents/com~apple~CloudDocs/AI Coworking/01_Personal_HQ/Projects/Knowledge_HQ/AI_Supastack"
 SNAPSHOT="$REPO_DIR/scripts/stack-snapshot.json"
 
 log() { echo "[capture-stack] $*"; }

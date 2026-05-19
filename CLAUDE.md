@@ -1,4 +1,4 @@
-# ai-supastack — Project Instructions
+# AI_Supastack — Project Instructions
 
 This project handles: **a single-page reference site for my entire AI software stack**, deployed via GitHub Pages, with live editing via GitHub OAuth + Supabase.
 
@@ -7,8 +7,8 @@ These instructions stack on top of `01_Personal_HQ/CLAUDE.md` and the root AI OS
 ## Stack
 
 - **Single HTML file** (`index.html`) — wiki-style structured list
-- **Hosting:** GitHub Pages at `commanderwi11.github.io/ai-supastack/`
-- **Repo:** `CommanderWi11/ai-supastack`
+- **Hosting:** GitHub Pages at `commanderwi11.github.io/AI_Supastack/`
+- **Repo:** `CommanderWi11/AI_Supastack`
 - **Edits:** In-page UI commits back via GitHub Contents API
 - **Auth:** GitHub OAuth via Supabase
 
