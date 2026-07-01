@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-05-11T09:53:28Z",
+  "capturedAt": "2026-07-01T10:46:15Z",
   "brew": {},
   "brewCasks": {
     "font-jetbrains-mono": "2.304",
@@ -18,15 +18,25 @@
     "npm": "11.12.1",
     "openclaw": "2026.4.9",
     "playwright": "1.59.1",
-    "playwriter": "0.1.0",
+    "playwriter": "0.2.0",
     "pnpm": "10.33.0",
     "vercel": "53.1.0"
   },
   "claudePlugins": [
     "claude-hud/claude-hud",
+    "claude-plugins-official/auth0",
+    "claude-plugins-official/brightdata-plugin",
+    "claude-plugins-official/firecrawl",
     "claude-plugins-official/frontend-design",
+    "claude-plugins-official/supabase",
     "claude-plugins-official/superpowers",
     "claude-plugins-official/vercel",
+    "temp_git_1781812970707_6gkvne/.git",
+    "temp_git_1782327190717_30vw76/.git",
+    "temp_git_1782418179127_qjkxy9/.git",
+    "temp_git_1782688111167_k2r44q/.git",
+    "temp_subdir_1782383428849_bl17bq.clone/.git",
+    "temp_subdir_1782418179124_cqe593.clone/.git",
     "thedotmack/claude-mem"
   ],
   "claudeSkills": [
@@ -38,13 +48,16 @@
     "pdf",
     "playwriter",
     "review-claudemd",
+    "the-shopper",
     "varlock",
     "vibesec",
     "xlsx"
   ],
   "mcpServers": [
+    "ecrew",
     "firecrawl",
     "gmail",
+    "gmail-binter",
     "guesty",
     "notion"
   ]
