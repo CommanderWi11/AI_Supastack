@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# launchd runs with a bare PATH; git's credential helper shells out to `gh`
+# (homebrew), so make sure it's reachable.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 REPO_DIR="/Users/openbob/Library/Mobile Documents/com~apple~CloudDocs/AI Coworking/01_Personal_HQ/Projects/Knowledge_HQ/AI_Supastack"
 SNAPSHOT="$REPO_DIR/scripts/stack-snapshot.json"
 
