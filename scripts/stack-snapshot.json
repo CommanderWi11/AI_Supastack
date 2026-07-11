@@ -1,27 +1,8 @@
 {
-  "capturedAt": "2026-07-01T11:50:55Z",
+  "capturedAt": "2026-07-11T22:26:01Z",
   "brew": {},
-  "brewCasks": {
-    "font-jetbrains-mono": "2.304",
-    "gcloud-cli": "563.0.0",
-    "ghostty": "1.3.1",
-    "iterm2": "3.6.9",
-    "nomachine": "9.4.14_1",
-    "opensuperwhisper": "0.1.0",
-    "tailscale-app": "1.96.5"
-  },
-  "npm": {
-    "@openai/codex": "0.125.0",
-    "@playwright/cli": "0.1.11",
-    "clawhub": "0.9.0",
-    "gmail-mcp-server": "1.0.30",
-    "npm": "11.12.1",
-    "openclaw": "2026.4.9",
-    "playwright": "1.59.1",
-    "playwriter": "0.2.0",
-    "pnpm": "10.33.0",
-    "vercel": "53.1.0"
-  },
+  "brewCasks": {},
+  "npm": {},
   "claudePlugins": [
     "claude-hud/claude-hud",
     "claude-plugins-official/auth0",
@@ -31,12 +12,14 @@
     "claude-plugins-official/supabase",
     "claude-plugins-official/superpowers",
     "claude-plugins-official/vercel",
-    "temp_git_1781812970707_6gkvne/.git",
-    "temp_git_1782327190717_30vw76/.git",
-    "temp_git_1782418179127_qjkxy9/.git",
     "temp_git_1782688111167_k2r44q/.git",
-    "temp_subdir_1782383428849_bl17bq.clone/.git",
-    "temp_subdir_1782418179124_cqe593.clone/.git",
+    "temp_git_1782914569642_4qwg16/.git",
+    "temp_git_1782915254938_ap84jw/.git",
+    "temp_git_1782939508947_no9jqo/.git",
+    "temp_subdir_1782924361056_dswc20.clone/.git",
+    "temp_subdir_1782926206501_44oip5.clone/.git",
+    "temp_subdir_1782939508946_fjuxrw.clone/.git",
+    "temp_subdir_1782994955675_asict2.clone/.git",
     "thedotmack/claude-mem"
   ],
   "claudeSkills": [
