@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-07-11T22:31:56Z",
+  "capturedAt": "2026-07-18T01:00:05Z",
   "brew": {},
   "brewCasks": {
     "font-jetbrains-mono": "2.304",
@@ -18,7 +18,7 @@
     "npm": "11.12.1",
     "openclaw": "2026.4.9",
     "playwright": "1.59.1",
-    "playwriter": "0.2.0",
+    "playwriter": "0.4.0",
     "pnpm": "10.33.0",
     "vercel": "53.1.0"
   },
@@ -31,14 +31,14 @@
     "claude-plugins-official/supabase",
     "claude-plugins-official/superpowers",
     "claude-plugins-official/vercel",
-    "temp_git_1782688111167_k2r44q/.git",
-    "temp_git_1782914569642_4qwg16/.git",
-    "temp_git_1782915254938_ap84jw/.git",
-    "temp_git_1782939508947_no9jqo/.git",
-    "temp_subdir_1782924361056_dswc20.clone/.git",
-    "temp_subdir_1782926206501_44oip5.clone/.git",
-    "temp_subdir_1782939508946_fjuxrw.clone/.git",
-    "temp_subdir_1782994955675_asict2.clone/.git",
+    "temp_git_1783891031575_wju3sd/.git",
+    "temp_git_1783891031576_4x8wu8/.git",
+    "temp_git_1783891031576_5375ma/.git",
+    "temp_git_1783891031576_5heuuc/.git",
+    "temp_subdir_1783871010679_yle1nq.clone/.git",
+    "temp_subdir_1783891031574_mmcgxj.clone/.git",
+    "temp_subdir_1783938406462_0kxcl5.clone/.git",
+    "temp_subdir_1783940184165_3d80jw.clone/.git",
     "thedotmack/claude-mem"
   ],
   "claudeSkills": [
