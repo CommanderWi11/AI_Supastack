@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-07-18T01:00:05Z",
+  "capturedAt": "2026-07-23T16:37:29Z",
   "brew": {},
   "brewCasks": {
     "font-jetbrains-mono": "2.304",
@@ -35,10 +35,13 @@
     "temp_git_1783891031576_4x8wu8/.git",
     "temp_git_1783891031576_5375ma/.git",
     "temp_git_1783891031576_5heuuc/.git",
+    "temp_git_1784368514137_11hh8a/.git",
+    "temp_git_1784568249351_3g1x15/.git",
     "temp_subdir_1783871010679_yle1nq.clone/.git",
     "temp_subdir_1783891031574_mmcgxj.clone/.git",
     "temp_subdir_1783938406462_0kxcl5.clone/.git",
     "temp_subdir_1783940184165_3d80jw.clone/.git",
+    "temp_subdir_1784544851280_f7t7zo.clone/.git",
     "thedotmack/claude-mem"
   ],
   "claudeSkills": [
