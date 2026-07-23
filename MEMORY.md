@@ -1,6 +1,6 @@
 # AI_Supastack Memory
 
-Last reviewed: 2026-05-11
+Last reviewed: 2026-07-23
 
 ## Project state
 
@@ -20,6 +20,13 @@ Last reviewed: 2026-05-11
 - Scope: tools only, no project listings
 - **Spec 1 (2026-05-10):** Full reorg + schema refactor — 16 sections, `subEntries` nesting for plugin skills, version field normalized (omit when unknown), skill ID convention (`plugin:skill` for bundled, bare for custom/harness). Specs + plan in `docs/superpowers/`.
 - **Spec 2 (2026-05-11):** Auto-sync live. Two-layer automation: Mac launchd (Saturday 2am) + GHA cron (Sunday 8am UTC). All 22 mapped registry entries resolving.
+- **Stack audit (2026-07-23):** Reviewed the full wiki against the live Mac snapshot for duplicates/drift/order. Actions taken:
+  - Fixed a real ID collision — the `Paperclip` entry and one of its own `subEntries` both used id `paperclip`. Renamed the top-level entry to `paperclip-platform` (subEntry ids unchanged, since those mirror real skill names and `sync-stack.mjs` only keys off top-level entry ids for `manual`-type sources — confirmed safe). Updated `stack-sources.json`'s key to match.
+  - Added `the-shopper` (custom-built buying-agent skill) to Custom Skills, packaged as `downloads/the-shopper.zip` (same `{slug}/_meta.json + SKILL.md` format as `whoop-interpretation-skill.zip`) so it's downloadable from the page.
+  - Removed unused/redundant local installs: `iterm2` (redundant now that Ghostty is primary terminal) and `opensuperwhisper` (untracked, unversioned GUI dictation wrapper — kept `whisper-cpp`, the actively-synced core CLI used by the actual AI stack).
+  - Cleared 11 stale `temp_git_*`/`temp_subdir_*` scratch dirs from `~/.claude/plugins/cache` (leftover from clone/worktree ops, none newer than several days old, not real plugins).
+  - Kept `plugin-psychologist-analyst` — confirmed still wanted despite not appearing in the latest Mac snapshot (installed via Smithery, likely outside the path `capture-stack.sh` scans).
+  - Still open from that audit: confirm whether `clawhub`/`openclaw` (npm globals) are still needed before documenting or removing them.
 
 ## Auto-sync components
 
