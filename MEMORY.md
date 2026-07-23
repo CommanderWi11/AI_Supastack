@@ -49,8 +49,10 @@ Last reviewed: 2026-05-11
 
 ## Current open loops
 
-- `vercel` drift: installed 53.1.0, latest 53.3.2 — update when convenient
-- `gcloud` drift: installed 563.0.0, latest 567.0.0 — update when convenient
+- `vercel` drift: installed 53.1.0, latest 56.3.2 — update when convenient
+- `gcloud` drift: installed 563.0.0, latest 576.0.0 — update when convenient
+- `tailscale` drift: installed 1.96.5, latest 1.98.9 — update when convenient
+- 2026-07-23: Mac launchd push (`chore: update stack snapshot 2026-07-23`) collided with GHA weekly sync commits (diverged branches, no file overlap — launchd only touches `stack-snapshot.json`, GHA only touches `index.html`). Resolved via rebase + push. If this recurs often, consider having `capture-stack.sh` `git pull --rebase` before committing.
 
 ## Archive
 

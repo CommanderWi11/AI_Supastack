@@ -109,6 +109,9 @@ if git diff --cached --quiet; then
   log "No changes to snapshot — skipping commit"
 else
   git commit -m "chore: update stack snapshot $(date +%Y-%m-%d)"
+  # GHA's weekly sync commits to index.html can land between launchd runs;
+  # rebase first so a normal push doesn't get rejected as non-fast-forward.
+  git pull --rebase origin main
   git push
   log "Pushed snapshot"
 fi
