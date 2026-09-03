@@ -2,3 +2,9 @@
 .env
 .env.local
 .env.*.local
+
+# Operational docs — kept local, never published (this repo is public;
+# repo files are browsable even when the Pages build ignores them)
+CLAUDE.md
+MEMORY.md
+Resources/
