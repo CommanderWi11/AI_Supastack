@@ -1,2060 +1,677 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Supastack — CommanderWi11 AI Build</title>
-  <meta name="description" content="Step-by-step AI software stack for rebuilding from scratch">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-  <style>
-    /* =============================================
-       CSS RESET + BASE
-    ============================================= */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blue: #0969da;
-      --blue-light: #dbeafe;
-      --blue-muted: #54aeff;
-      --text: #24292f;
-      --text-muted: #656d76;
-      --bg: #ffffff;
-      --bg-alt: #f6f8fa;
-      --border: #d0d7de;
-      --border-muted: #e8eaed;
-      --sidebar-w: 252px;
-      --header-h: 60px;
-      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      --radius: 6px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
-      --shadow: 0 3px 10px rgba(0,0,0,.10);
-      --bg-hover: #eef6ff;
-      --blue-border: #bee3f8;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text);
-      background: var(--bg);
-    }
-
-    a { color: var(--blue); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* =============================================
-       LAYOUT
-    ============================================= */
-    #app-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: var(--header-h);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .header-left { display: flex; align-items: center; gap: 12px; }
-
-    .site-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
-
-    .site-subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .header-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .header-right { display: flex; align-items: center; gap: 12px; }
-
-    .btn-login {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: var(--font);
-      color: var(--bg);
-      background: var(--text);
-      border: 1px solid var(--text);
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .btn-login:hover { background: #444c56; border-color: #444c56; text-decoration: none; }
-
-    .btn-login svg { flex-shrink: 0; }
-
-    #layout {
-      display: flex;
-      min-height: calc(100vh - var(--header-h));
-    }
-
-    /* =============================================
-       SIDEBAR
-    ============================================= */
-    #sidebar {
-      width: var(--sidebar-w);
-      flex-shrink: 0;
-      position: sticky;
-      top: var(--header-h);
-      height: calc(100vh - var(--header-h));
-      overflow-y: auto;
-      padding: 20px 0;
-      border-right: 1px solid var(--border);
-      background: var(--bg-alt);
-    }
-
-    .sidebar-heading {
-      padding: 0 16px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-    }
-
-    .toc-list { list-style: none; }
-
-    .toc-item a {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      font-size: 13px;
-      color: var(--text);
-      border-left: 3px solid transparent;
-      transition: background 0.1s, border-color 0.1s, color 0.1s;
-    }
-
-    .toc-item a:hover {
-      background: var(--blue-light);
-      color: var(--blue);
-      text-decoration: none;
-      border-left-color: var(--blue);
-    }
-
-    .toc-item a.active {
-      background: var(--blue-light);
-      color: var(--blue);
-      border-left-color: var(--blue);
-      font-weight: 600;
-    }
-
-    .toc-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 18px;
-      height: 18px;
-      font-size: 10px;
-      font-weight: 700;
-      border-radius: 50%;
-      background: var(--border);
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    .toc-item a.active .toc-num,
-    .toc-item a:hover .toc-num {
-      background: var(--blue);
-      color: white;
-    }
-
-    /* =============================================
-       MAIN CONTENT
-    ============================================= */
-    #main {
-      flex: 1;
-      min-width: 0;
-      padding: 32px 40px 64px;
-      max-width: 900px;
-    }
-
-    /* =============================================
-       MOBILE NAV
-    ============================================= */
-    #mobile-nav {
-      display: none;
-      padding: 12px 16px;
-      background: var(--bg-alt);
-      border-bottom: 1px solid var(--border);
-    }
-
-    #mobile-nav-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    #mobile-nav select {
-      width: 100%;
-      padding: 8px 10px;
-      font-size: 14px;
-      font-family: var(--font);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    /* =============================================
-       SECTIONS
-    ============================================= */
-    .stack-section {
-      margin-bottom: 48px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--border-muted);
-    }
-
-    .section-order {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 50%;
-      background: var(--blue);
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-      border-left: 4px solid var(--blue);
-      padding-left: 12px;
-    }
-
-    /* =============================================
-       ENTRY TABLE
-    ============================================= */
-    .entries-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .entries-table thead th {
-      padding: 8px 14px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      background: var(--bg-alt);
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-
-    .entry-row:nth-child(odd) { background: var(--bg); }
-    .entry-row:nth-child(even) { background: var(--bg-alt); }
-    .entry-row:hover { background: var(--bg-hover); }
-
-    .entry-row td {
-      padding: 10px 14px;
-      vertical-align: top;
-      border-bottom: 1px solid var(--border-muted);
-    }
-
-    .entry-row:last-child td { border-bottom: none; }
-
-    .entry-name {
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    .entry-version {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      margin-top: 2px;
-    }
-
-    .links-cell { min-width: 140px; }
-
-    .link-badges { display: flex; flex-wrap: wrap; gap: 4px; }
-
-    .link-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--blue);
-      background: var(--blue-light);
-      border: 1px solid var(--blue-border);
-      border-radius: 20px;
-      text-decoration: none;
-      transition: background 0.1s, color 0.1s;
-      white-space: nowrap;
-    }
-    .link-badge:hover {
-      background: var(--blue);
-      color: white;
-      border-color: var(--blue);
-      text-decoration: none;
-    }
-
-    .notes-cell { min-width: 200px; }
-
-    .sub-entries {
-      margin: 10px 0 0 0;
-      padding: 0;
-      list-style: none;
-      border-top: 1px solid var(--border-muted);
-    }
-    .sub-entry {
-      padding: 6px 0 6px 12px;
-      border-bottom: 1px solid var(--border-muted);
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      gap: 8px;
-      align-items: baseline;
-    }
-    .sub-entry:last-child { border-bottom: none; }
-    .sub-entry-name {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-    }
-    .sub-entry-notes { flex: 1; }
-
-    .notes-details summary {
-      cursor: pointer;
-      font-size: 12px;
-      color: var(--text-muted);
-      user-select: none;
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .notes-details summary::-webkit-details-marker { display: none; }
-
-    .notes-details summary::before {
-      content: "▶";
-      font-size: 9px;
-      transition: transform 0.15s;
-      color: var(--text-muted);
-    }
-
-    .notes-details[open] summary::before { transform: rotate(90deg); }
-
-    .notes-details[open] summary { color: var(--text); margin-bottom: 6px; }
-
-    .notes-content {
-      font-size: 12px;
-      color: var(--text-muted);
-      background: var(--bg-alt);
-      border: 1px solid var(--border-muted);
-      border-radius: var(--radius);
-      padding: 8px 10px;
-      margin-top: 4px;
-    }
-
-    .notes-content code {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 11px;
-      background: var(--border-muted);
-      padding: 1px 4px;
-      border-radius: 3px;
-      color: var(--text);
-    }
-
-    /* =============================================
-       EDIT CONTROLS
-    ============================================= */
-    .edit-controls {
-      display: none; /* shown only when authenticated */
-      gap: 6px;
-      align-items: center;
-    }
-
-    .btn-edit, .btn-delete {
-      padding: 3px 10px;
-      font-size: 12px;
-      font-family: var(--font);
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      font-weight: 500;
-      line-height: 1.5;
-    }
-    .btn-edit {
-      background: var(--bg-alt);
-      color: var(--text);
-    }
-    .btn-edit:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue-border); }
-    .btn-delete {
-      background: var(--bg-alt);
-      color: #cf222e;
-      border-color: #ffcdd2;
-    }
-    .btn-delete:hover { background: #fff0f0; border-color: #cf222e; }
-
-    /* =============================================
-       FOOTER
-    ============================================= */
-    #app-footer {
-      margin-top: 64px;
-      padding: 20px 40px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-alt);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    #app-footer a { color: var(--text-muted); }
-    #app-footer a:hover { color: var(--blue); }
-
-    /* =============================================
-       RESPONSIVE
-    ============================================= */
-    @media (max-width: 768px) {
-      #sidebar { display: none; }
-      #mobile-nav { display: block; }
-
-      #main { padding: 20px 16px 48px; }
-
-      #app-header { padding: 0 16px; }
-      .site-subtitle { display: none; }
-
-      .entries-table { font-size: 13px; }
-
-      #app-footer { padding: 16px; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- =============================================
-     STACK DATA (edit this JSON to update the page)
-============================================= -->
-<script type="application/json" id="stack-data">
-{
-  "sections": [
-    {
-      "id": "homebrew",
-      "title": "Homebrew",
-      "order": 1,
-      "entries": [
-        {
-          "id": "homebrew",
-          "name": "Homebrew",
-          "version": "6.0.20",
-          "links": [
-            {
-              "label": "Install",
-              "url": "https://brew.sh"
-            },
-            {
-              "label": "Docs",
-              "url": "https://docs.brew.sh"
-            }
-          ],
-          "notes": "The missing package manager for macOS. Install first — everything else depends on it. Run: <code>/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"</code>"
-        }
-      ]
-    },
-    {
-      "id": "terminal",
-      "title": "Terminal",
-      "order": 2,
-      "entries": [
-        {
-          "id": "ghostty",
-          "name": "Ghostty",
-          "version": "1.3.1",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://ghostty.org"
-            },
-            {
-              "label": "Docs",
-              "url": "https://ghostty.org/docs"
-            }
-          ],
-          "notes": "Fast, native terminal emulator. Primary terminal. Download from the site or: <code>brew install --cask ghostty</code>"
-        }
-      ]
-    },
-    {
-      "id": "local-apps",
-      "title": "Local Apps",
-      "order": 3,
-      "entries": [
-        {
-          "id": "cursor",
-          "name": "Cursor",
-          "version": "3.18.9,2ba48ff3f7514cc4643c52ca9f7b3173d9b66137",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://cursor.com"
-            },
-            {
-              "label": "Docs",
-              "url": "https://docs.cursor.com"
-            }
-          ],
-          "notes": "AI-first code editor built on VS Code. Inline AI editing, codebase chat, and agentic coding. Install: <code>brew install --cask cursor</code>"
-        },
-        {
-          "id": "obsidian",
-          "name": "Obsidian",
-          "version": "1.13.7",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://obsidian.md"
-            },
-            {
-              "label": "Download",
-              "url": "https://obsidian.md/download"
-            }
-          ],
-          "notes": "Local-first markdown knowledge base — used as the persistent memory layer (AI Brain vault). All notes are plain <code>.md</code> files stored in iCloud. Install: <code>brew install --cask obsidian</code>"
-        }
-      ]
-    },
-    {
-      "id": "runtimes",
-      "title": "Dev Runtimes",
-      "order": 4,
-      "entries": [
-        {
-          "id": "nodejs",
-          "name": "Node.js",
-          "version": "26.8.1",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://nodejs.org"
-            },
-            {
-              "label": "Install",
-              "url": "https://nodejs.org/en/download"
-            }
-          ],
-          "notes": "JavaScript runtime — required for Claude Code, MCP servers, and most tooling. Install: <code>brew install node</code>"
-        },
-        {
-          "id": "python",
-          "name": "Python",
-          "version": "3.14.7",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://python.org"
-            },
-            {
-              "label": "Downloads",
-              "url": "https://www.python.org/downloads"
-            }
-          ],
-          "notes": "Python interpreter. Install: <code>brew install python@3.14</code>. Use <code>uv</code> for project-level venv management."
-        },
-        {
-          "id": "deno",
-          "name": "Deno",
-          "version": "2.9.6",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://deno.com"
-            },
-            {
-              "label": "Docs",
-              "url": "https://docs.deno.com"
-            }
-          ],
-          "notes": "Secure TypeScript/JS runtime with built-in tooling. Install: <code>brew install deno</code>"
-        },
-        {
-          "id": "uv",
-          "name": "uv",
-          "version": "0.12.7",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/astral-sh/uv"
-            },
-            {
-              "label": "Docs",
-              "url": "https://docs.astral.sh/uv"
-            }
-          ],
-          "notes": "Extremely fast Python package and project manager (Rust-based). Replaces pip/venv/poetry. Install: <code>brew install uv</code>"
-        }
-      ]
-    },
-    {
-      "id": "cli-tools",
-      "title": "CLI Tools",
-      "order": 5,
-      "entries": [
-        {
-          "id": "gh",
-          "name": "gh (GitHub CLI)",
-          "version": "2.98.0",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://cli.github.com"
-            },
-            {
-              "label": "Manual",
-              "url": "https://cli.github.com/manual"
-            }
-          ],
-          "notes": "Official GitHub CLI — create repos, PRs, manage Actions, etc. Install: <code>brew install gh</code> then <code>gh auth login</code>"
-        },
-        {
-          "id": "gcloud",
-          "name": "gcloud",
-          "version": "582.0.0",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://cloud.google.com/sdk"
-            },
-            {
-              "label": "Docs",
-              "url": "https://cloud.google.com/sdk/docs/install"
-            }
-          ],
-          "notes": "Google Cloud SDK CLI. Install: <code>brew install --cask google-cloud-sdk</code> then <code>gcloud auth login</code>"
-        },
-        {
-          "id": "fzf",
-          "name": "fzf",
-          "version": "0.74.3",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/junegunn/fzf"
-            }
-          ],
-          "notes": "Fuzzy finder for shell history, file search, and piped input. Install: <code>brew install fzf</code>"
-        },
-        {
-          "id": "ffmpeg",
-          "name": "ffmpeg",
-          "version": "9.0.1",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://ffmpeg.org"
-            },
-            {
-              "label": "Repo",
-              "url": "https://github.com/FFmpeg/FFmpeg"
-            }
-          ],
-          "notes": "Audio/video processing toolkit. Required by yt-dlp and Whisper workflows. Install: <code>brew install ffmpeg</code>"
-        },
-        {
-          "id": "yt-dlp",
-          "name": "yt-dlp",
-          "version": "2026.8.19",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/yt-dlp/yt-dlp"
-            }
-          ],
-          "notes": "Download video/audio from YouTube and 1000+ sites. Requires ffmpeg. Install: <code>brew install yt-dlp</code>"
-        },
-        {
-          "id": "sqlite",
-          "name": "SQLite",
-          "version": "3.53.4",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://sqlite.org"
-            }
-          ],
-          "notes": "Lightweight embedded SQL database engine. Often pre-installed on macOS; keep it fresh: <code>brew install sqlite</code>"
-        }
-      ]
-    },
-    {
-      "id": "core-ai",
-      "title": "Core AI Tools",
-      "order": 6,
-      "entries": [
-        {
-          "id": "claude-code",
-          "name": "Claude Code",
-          "version": "2.1.251",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://claude.ai/code"
-            },
-            {
-              "label": "Docs",
-              "url": "https://docs.anthropic.com/en/docs/claude-code"
-            }
-          ],
-          "notes": "Anthropic's agentic AI coding CLI. Primary AI assistant. Install: <code>npm install -g @anthropic-ai/claude-code</code>"
-        },
-        {
-          "id": "ollama",
-          "name": "Ollama",
-          "version": "v0.33.2",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://ollama.com"
-            },
-            {
-              "label": "Docs",
-              "url": "https://github.com/ollama/ollama"
-            }
-          ],
-          "notes": "Run large language models locally. Active model: <code>qwen2.5:14b</code>. Install: <code>brew install ollama</code> then <code>ollama pull qwen2.5:14b</code>"
-        },
-        {
-          "id": "mlx",
-          "name": "MLX / MLX-C",
-          "version": "0.32.1",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/ml-explore/mlx"
-            }
-          ],
-          "notes": "Apple's ML framework optimised for Apple Silicon. C bindings via MLX-C. Install: <code>brew install mlx mlx-c</code>"
-        },
-        {
-          "id": "whisper",
-          "name": "Whisper (whisper-cpp)",
-          "version": "1.9.2",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/ggerganov/whisper.cpp"
-            }
-          ],
-          "notes": "OpenAI Whisper speech-to-text, C++ port optimised for Apple Silicon. Requires ffmpeg. Install: <code>brew install whisper-cpp</code>"
-        },
-        {
-          "id": "ggml",
-          "name": "GGML",
-          "version": "0.22.0",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/ggerganov/ggml"
-            }
-          ],
-          "notes": "Tensor library for ML inference — underpins llama.cpp and whisper.cpp. Install: <code>brew install ggml</code>"
-        }
-      ]
-    },
-    {
-      "id": "methodologies",
-      "title": "Methodologies & Frameworks",
-      "order": 7,
-      "entries": [
-        {
-          "id": "bmad-method",
-          "name": "BMAD-METHOD",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bmad-code-org/BMAD-METHOD"
-            }
-          ],
-          "notes": "Breakthrough Method for Agile AI-Driven Development. Structured framework that uses 12+ specialized agent personas (analyst, architect, PM, dev, etc.) to guide the full dev lifecycle — from discovery through implementation. Solves the problem of shallow AI output by enforcing proven agile practices at each phase. Free and open-source."
-        }
-      ]
-    },
-    {
-      "id": "plugins",
-      "title": "Claude Code Plugins",
-      "order": 8,
-      "entries": [
-        {
-          "id": "plugin-superpowers",
-          "name": "superpowers",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/anthropics/claude-code"
-            }
-          ],
-          "notes": "Official Anthropic plugin — adds planning, brainstorm, debugging, and systematic workflow skills. Install: <code>@claude-plugins-official/superpowers</code>",
-          "subEntries": [
-            {
-              "id": "superpowers:brainstorming",
-              "notes": "Explores intent, design, and tradeoffs before any feature implementation. Invoke before building."
-            },
-            {
-              "id": "superpowers:test-driven-development",
-              "notes": "Enforces TDD discipline — writes tests before implementation code."
-            },
-            {
-              "id": "superpowers:systematic-debugging",
-              "notes": "Structured debugging protocol. Diagnoses root cause before proposing fixes."
-            },
-            {
-              "id": "superpowers:writing-plans",
-              "notes": "Converts a spec into a phased, reviewable implementation plan."
-            },
-            {
-              "id": "superpowers:executing-plans",
-              "notes": "Executes a written plan in a new session with review checkpoints."
-            },
-            {
-              "id": "superpowers:verification-before-completion",
-              "notes": "Requires running verification commands before claiming work is done."
-            },
-            {
-              "id": "superpowers:finishing-a-development-branch",
-              "notes": "Wraps up a feature branch — cleanup, tests, changelog, PR prep."
-            },
-            {
-              "id": "superpowers:using-git-worktrees",
-              "notes": "Isolates feature work in a git worktree so the main workspace stays clean."
-            },
-            {
-              "id": "superpowers:requesting-code-review",
-              "notes": "Prepares code for peer review — structures the PR, highlights decisions, identifies risk areas."
-            },
-            {
-              "id": "superpowers:receiving-code-review",
-              "notes": "Guides acting on review feedback systematically."
-            },
-            {
-              "id": "superpowers:dispatching-parallel-agents",
-              "notes": "Splits work across multiple subagents running in parallel."
-            },
-            {
-              "id": "superpowers:subagent-driven-development",
-              "notes": "Executes independent implementation tasks via parallel subagents."
-            }
-          ]
-        },
-        {
-          "id": "plugin-frontend-design",
-          "name": "frontend-design",
-          "links": [
-            {
-              "label": "Plugin Store",
-              "url": "https://github.com/anthropics/claude-code"
-            }
-          ],
-          "notes": "Official Anthropic plugin — high-quality frontend design generation skill. Install: <code>@claude-plugins-official/frontend-design</code>",
-          "subEntries": [
-            {
-              "id": "frontend-design:frontend-design",
-              "notes": "Generates production-quality, distinctive frontend UI. Avoids generic AI aesthetics. Invoke when building web components, pages, or applications."
-            }
-          ]
-        },
-        {
-          "id": "plugin-claude-mem",
-          "name": "claude-mem",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/thedotmack/claude-mem"
-            }
-          ],
-          "notes": "Persistent cross-session memory for Claude Code. Enables knowledge graphs, corpus search, timeline, and smart exploration. Install: <code>@thedotmack/claude-mem</code>",
-          "subEntries": [
-            {
-              "id": "claude-mem:mem-search",
-              "notes": "Searches persistent cross-session memory database. Recall past decisions, solutions, or context."
-            },
-            {
-              "id": "claude-mem:make-plan",
-              "notes": "Creates a phased implementation plan stored in memory, visible across sessions."
-            },
-            {
-              "id": "claude-mem:do",
-              "notes": "Executes a plan stored in claude-mem via subagents."
-            },
-            {
-              "id": "claude-mem:smart-explore",
-              "notes": "Token-efficient codebase structure search. Maps a repo's shape without exhausting context."
-            },
-            {
-              "id": "claude-mem:timeline-report",
-              "notes": "Generates a full project development history report from claude-mem's observation log."
-            }
-          ]
-        },
-        {
-          "id": "plugin-playwright-pro",
-          "name": "Playwright Pro",
-          "links": [
-            {
-              "label": "Plugin Hub",
-              "url": "https://www.claudepluginhub.com/plugins/alirezarezvani-pw-engineering-team-playwright-pro"
-            }
-          ],
-          "notes": "Automates the full Playwright E2E testing lifecycle: generates tests from user stories, URLs, or codebases; migrates Cypress/Selenium suites; diagnoses and fixes flaky failures; reviews for best practices and coverage; produces Markdown/HTML/Slack reports.",
-          "subEntries": [
-            {
-              "id": "playwriter",
-              "notes": "Controls your real Chrome browser via Playwright. Hook-driven: start with <code>acquirePage()</code>, use <code>state.page</code>. Handles JS-heavy SPAs, login walls, lazy-loaded UIs."
-            }
-          ]
-        },
-        {
-          "id": "plugin-psychologist-analyst",
-          "name": "psychologist-analyst",
-          "links": [
-            {
-              "label": "Smithery",
-              "url": "https://smithery.ai/skills/rysweet/psychologist-analyst"
-            }
-          ],
-          "notes": "Claude Code skill by rysweet — analyzes writing, journaling, and conversations for emotional patterns, mental state indicators, and behavioural insights. Install via Smithery."
-        },
-        {
-          "id": "plugin-claude-hud",
-          "name": "claude-hud",
-          "links": [
-            {
-              "label": "Plugin Hub",
-              "url": "https://github.com/disler/claude-hud"
-            }
-          ],
-          "notes": "Status-bar HUD for Claude Code — shows model, token usage, cost, and session info in real time. Install: <code>@claude-hud/claude-hud</code>",
-          "subEntries": [
-            {
-              "id": "claude-hud:setup",
-              "notes": "Configures claude-hud as a statusline in the Claude Code terminal."
-            },
-            {
-              "id": "claude-hud:configure",
-              "notes": "Adjusts claude-hud layout, display language, and presets."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "mcp-servers",
-      "title": "MCP Servers",
-      "order": 9,
-      "entries": [
-        {
-          "id": "mcp-notion",
-          "name": "Notion MCP",
-          "version": "latest",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/makenotion/notion-mcp-server"
-            }
-          ],
-          "notes": "Official Notion MCP server. Connects Claude Code to Airnest workspace via bot \"Cloude Connection Luis\". Run via Claude Code settings: <code>npx @notionhq/notion-mcp-server</code>. Set <code>NOTION_API_KEY</code> env var."
-        },
-        {
-          "id": "mcp-canva",
-          "name": "Canva MCP",
-          "version": "latest",
-          "links": [
-            {
-              "label": "Developers",
-              "url": "https://www.canva.com/developers"
-            }
-          ],
-          "notes": "Canva design integration — create, edit, export designs from Claude Code. Available via claude.ai MCP integration settings."
-        },
-        {
-          "id": "mcp-gdrive",
-          "name": "Google Drive MCP",
-          "version": "latest",
-          "links": [
-            {
-              "label": "Google Drive API",
-              "url": "https://developers.google.com/drive/api/guides/about-sdk"
-            }
-          ],
-          "notes": "Google Drive file access from Claude Code. Available via claude.ai MCP integration settings. Authenticate with <code>mcp__claude_ai_Google_Drive__authenticate</code>."
-        }
-      ]
-    },
-    {
-      "id": "browser-auto",
-      "title": "Browser Automation",
-      "order": 10,
-      "entries": [
-        {
-          "id": "pw-demux",
-          "name": "pw-demux hooks",
-          "version": "latest",
-          "links": [],
-          "notes": "Custom hook system that enables parallel Playwright tabs — each Claude Code session gets its own tab via ownership tracking. Three hooks: SessionStart (bootstrap), PreToolUse (inject ownership prelude), PostToolUse (cleanup). Diagnose: <code>bash ~/tools/pw/hooks/doctor.sh</code>"
-        }
-      ]
-    },
-    {
-      "id": "email",
-      "title": "Email",
-      "order": 11,
-      "entries": [
-        {
-          "id": "himalaya",
-          "name": "Himalaya",
-          "version": "2.1.0",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/soywod/himalaya"
-            }
-          ],
-          "notes": "Terminal email client (IMAP/SMTP). Install: <code>brew install himalaya</code>. Config at <code>~/.config/himalaya/config.toml</code>."
-        }
-      ]
-    },
-    {
-      "id": "remote-access",
-      "title": "Remote Access",
-      "order": 12,
-      "entries": [
-        {
-          "id": "tailscale",
-          "name": "Tailscale",
-          "version": "1.102.3",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://tailscale.com"
-            },
-            {
-              "label": "KB",
-              "url": "https://tailscale.com/kb"
-            }
-          ],
-          "notes": "Zero-config VPN mesh network. Access any machine in your Tailnet by hostname. Install: <code>brew install --cask tailscale</code>"
-        }
-      ]
-    },
-    {
-      "id": "web-tools",
-      "title": "Web Tools",
-      "order": 13,
-      "entries": [
-        {
-          "id": "supabase",
-          "name": "Supabase",
-          "version": "latest",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://supabase.com"
-            },
-            {
-              "label": "Docs",
-              "url": "https://supabase.com/docs"
-            },
-            {
-              "label": "Dashboard",
-              "url": "https://app.supabase.com"
-            }
-          ],
-          "notes": "Open-source Firebase alternative — Postgres database, auth, edge functions, realtime, and storage. Used across multiple projects (whoop-whatsapp, PilotFinance, ai-supastack auth). Create a free project at app.supabase.com."
-        },
-        {
-          "id": "vercel",
-          "name": "Vercel",
-          "version": "59.10.0",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://vercel.com"
-            },
-            {
-              "label": "Dashboard",
-              "url": "https://vercel.com/dashboard"
-            },
-            {
-              "label": "CLI Docs",
-              "url": "https://vercel.com/docs/cli"
-            }
-          ],
-          "notes": "Serverless deployment platform for Next.js and static sites. Used to deploy whoop-whatsapp and other web apps. Install CLI: <code>npm i -g vercel</code> then <code>vercel login</code>."
-        },
-        {
-          "id": "resend",
-          "name": "Resend",
-          "version": "latest",
-          "links": [
-            {
-              "label": "Site",
-              "url": "https://resend.com"
-            },
-            {
-              "label": "Docs",
-              "url": "https://resend.com/docs"
-            },
-            {
-              "label": "Dashboard",
-              "url": "https://resend.com/emails"
-            }
-          ],
-          "notes": "Email API built for developers. Used to send transactional and automated emails (e.g. WHOOP health reports). Install SDK: <code>npm install resend</code>. Set <code>RESEND_API_KEY</code> env var."
-        },
-        {
-          "id": "paperclip-platform",
-          "name": "Paperclip",
-          "links": [
-            {
-              "label": "Docs",
-              "url": "https://paperclip.sh"
-            }
-          ],
-          "notes": "AI agent governance and coordination platform — manages tasks, agents, and workflows across sessions. Interacts via three bundled skills.",
-          "subEntries": [
-            {
-              "id": "paperclip",
-              "notes": "Interacts with the Paperclip API — checks assignments, updates task status, delegates work, posts comments."
-            },
-            {
-              "id": "paperclip-create-agent",
-              "notes": "Hires or configures new agents with governance-aware workflow — inspects adapters, drafts prompts, submits hire requests."
-            },
-            {
-              "id": "paperclip-create-plugin",
-              "notes": "Scaffolds new Paperclip plugins using the alpha SDK/runtime. Covers worker/UI surface, route conventions, and verification."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "ai-apps",
-      "title": "AI-Powered Apps",
-      "order": 14,
-      "entries": [
-        {
-          "id": "whoop-whatsapp",
-          "name": "WHOOP Daily Briefing",
-          "links": [
-            {
-              "label": "Guide",
-              "url": "whoop-guide.html"
-            }
-          ],
-          "notes": "Automated WHOOP health report delivered to WhatsApp each morning. Built on Next.js + Supabase Edge Functions + Resend. An OpenClaw agent reads the email report and replies via WhatsApp. See the guide for full setup instructions."
-        }
-      ]
-    },
-    {
-      "id": "custom-skills",
-      "title": "Custom Skills",
-      "order": 15,
-      "entries": [
-        {
-          "id": "skill-vibesec",
-          "name": "vibesec",
-          "links": [],
-          "notes": "Security review for web applications. Catches OWASP issues, access control flaws, injection vectors, and authentication problems. Trigger: 'audit this for security' or 'scan for vulnerabilities'."
-        },
-        {
-          "id": "skill-varlock",
-          "name": "varlock",
-          "links": [],
-          "notes": "Secure secrets and environment variable handling. Ensures API keys never appear in terminal output, logs, or Claude's context. Run <code>varlock load</code> to mask secrets; <code>varlock load --quiet</code> to validate silently."
-        },
-        {
-          "id": "skill-xlsx",
-          "name": "xlsx",
-          "links": [],
-          "notes": "Full spreadsheet operations: create, edit, fix formulas, add columns, build financial models, clean messy data, convert CSV/TSV to .xlsx. Trigger: 'create a spreadsheet with...' or 'fix the formulas in [file].xlsx'."
-        },
-        {
-          "id": "skill-pdf",
-          "name": "pdf",
-          "links": [],
-          "notes": "Read, extract text/tables, merge, split, rotate, watermark, encrypt, OCR scanned PDFs, and fill forms. Trigger: 'extract text from this PDF' or 'merge these PDFs'."
-        },
-        {
-          "id": "skill-internal-comms",
-          "name": "internal-comms",
-          "links": [],
-          "notes": "Writes structured internal communications: 3P updates (Progress/Plans/Problems), status reports, leadership updates, company newsletters, incident reports, and FAQs."
-        },
-        {
-          "id": "skill-review-claudemd",
-          "name": "review-claudemd",
-          "links": [],
-          "notes": "Analyzes recent conversation history to surface improvements for your CLAUDE.md files. Identifies new rules, preferences, and patterns worth codifying."
-        },
-        {
-          "id": "skill-para-memory",
-          "name": "para-memory-files",
-          "links": [],
-          "notes": "Persistent cross-session memory using PARA method (Projects/Areas/Resources/Archives). Three layers: knowledge graph with atomic YAML facts, daily notes timeline, and tacit user pattern memory. Also handles weekly synthesis and recall."
-        },
-        {
-          "id": "skill-the-shopper",
-          "name": "the-shopper",
-          "links": [
-            {
-              "label": "Download",
-              "url": "downloads/the-shopper.zip"
-            }
-          ],
-          "notes": "Autonomous online-buying agent — turns 'buy X' / 'order X' / 'reorder' into a completed purchase, paid with a hard-capped €50 virtual card, fully logged. Non-negotiable safety rails: never split an order to dodge the cap, never print/log the card number, always confirms subscriptions or anything over the cap before paying. Custom-built, not a bundled skill."
-        }
-      ]
-    },
-    {
-      "id": "harness-skills",
-      "title": "Harness Skills",
-      "order": 16,
-      "entries": [
-        {
-          "id": "skill-claude-api",
-          "name": "claude-api",
-          "links": [],
-          "notes": "Builds, debugs, and optimizes Claude API / Anthropic SDK apps. Handles prompt caching, tool use, model migrations (4.5→4.6→4.7), batch, citations, and memory. Auto-includes caching best practices."
-        },
-        {
-          "id": "skill-update-config",
-          "name": "update-config",
-          "links": [],
-          "notes": "Edits settings.json, configures hooks, permissions, and env vars. Required for automated behaviors ('whenever X, do Y') — these run in the harness, not in Claude's memory."
-        },
-        {
-          "id": "skill-keybindings",
-          "name": "keybindings-help",
-          "links": [],
-          "notes": "Customizes ~/.claude/keybindings.json — rebind keys, add chord shortcuts, change the submit key, or restructure any keyboard binding."
-        },
-        {
-          "id": "skill-simplify",
-          "name": "simplify",
-          "links": [],
-          "notes": "Post-implementation code quality review: spots over-engineering, duplication, and inefficiencies, then fixes them. Run after a feature is working to tighten it up."
-        },
-        {
-          "id": "skill-fewer-prompts",
-          "name": "fewer-permission-prompts",
-          "links": [],
-          "notes": "Scans conversation transcripts for common read-only Bash and MCP tool calls, then adds a prioritized allowlist to settings.json to reduce repetitive permission dialogs."
-        },
-        {
-          "id": "skill-loop",
-          "name": "loop",
-          "links": [],
-          "notes": "Runs a prompt or slash command on a recurring interval (e.g. 'check the build every 5 minutes', 'poll for status'). Self-pacing when no interval is specified."
-        },
-        {
-          "id": "skill-schedule",
-          "name": "schedule",
-          "links": [],
-          "notes": "Creates and manages scheduled remote agents on cron schedules. Use for recurring routines, automated tasks, or one-time future runs ('remind me to check X tomorrow')."
-        },
-        {
-          "id": "skill-init",
-          "name": "init",
-          "links": [],
-          "notes": "Generates a new CLAUDE.md for a codebase by analyzing its structure, stack, and conventions. Use when onboarding Claude Code to an unfamiliar repo."
-        },
-        {
-          "id": "skill-review",
-          "name": "review",
-          "links": [],
-          "notes": "Reviews a pull request — checks for correctness, edge cases, style, and missing test coverage. Invoke when ready for a systematic PR review pass."
-        },
-        {
-          "id": "skill-security-review",
-          "name": "security-review",
-          "links": [],
-          "notes": "Dedicated security audit pass — broader than vibesec, covers the full codebase and checks for systemic vulnerabilities, insecure defaults, and misconfigurations."
-        }
-      ]
-    }
-  ],
-  "meta": {
-    "lastUpdated": "2026-08-30",
-    "owner": "CommanderWi11"
-  }
-}
-</script>
-
-<!-- =============================================
-     HEADER
-============================================= -->
-<header id="app-header">
-  <div class="header-left">
-    <div>
-      <div class="site-title">AI Supastack</div>
-      <div class="site-subtitle">CommanderWi11's AI build — step-by-step setup for a fresh machine</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <span class="header-meta" id="header-date"></span>
-    <button class="btn-login" id="login-btn" onclick="handleLoginClick()" title="Login with GitHub">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-          0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-          -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87
-          2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
-          0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82
-          .64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82
-          .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-          0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-          0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-      </svg>
-      Login with GitHub
-    </button>
-    <div id="user-info" style="display:none"></div>
-  </div>
-</header>
-
-<!-- =============================================
-     MOBILE NAV (shown on < 768px)
-============================================= -->
-<div id="mobile-nav">
-  <label for="mobile-select" id="mobile-nav-label">Jump to section</label>
-  <select id="mobile-select" onchange="location.hash = '#section-' + this.value">
-    <option value="">— choose section —</option>
-  </select>
-</div>
-
-<!-- =============================================
-     LAYOUT: SIDEBAR + MAIN
-============================================= -->
-<div id="layout">
-  <nav id="sidebar" aria-label="Table of contents">
-    <div class="sidebar-heading">Installation Order</div>
-    <ul class="toc-list" id="toc-list"></ul>
-    <div style="padding:0 16px">
-      <button id="add-section-btn" class="edit-controls" onclick="openAddSectionModal()"
-        style="margin-top:16px;width:100%;padding:8px;background:#0969da;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">
-        + Add Section
-      </button>
-    </div>
-  </nav>
-
-  <main id="main">
-    <!-- Sections rendered by JS -->
-  </main>
-</div>
-
-<!-- =============================================
-     FOOTER
-============================================= -->
-<footer id="app-footer">
-  <span id="footer-meta"></span>
-  <a href="https://github.com/CammanderWi11/ai-supastack" target="_blank" rel="noopener">
-    View on GitHub →
-  </a>
-</footer>
-
-<!-- =============================================
-     SUPABASE AUTH
-============================================= -->
-<script>
-const SUPABASE_URL = 'https://scrubbed-project.supabase.co';
-const SUPABASE_ANON_KEY = 'SCRUBBED-KEY';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-function escHtmlAuth(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-async function handleLoginClick() {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-      scopes: 'public_repo',
-      redirectTo: window.location.href
-    }
-  });
-  if (error) alert('Login error: ' + error.message);
-}
-
-async function handleLogoutClick() {
-  await supabase.auth.signOut();
-  updateAuthUI(null);
-}
-
-function updateAuthUI(session) {
-  const loginBtn = document.getElementById('login-btn');
-  const userInfo = document.getElementById('user-info');
-
-  if (session) {
-    // Store provider_token (GitHub token) for later use by commit logic
-    window._githubToken = session.provider_token;
-
-    const user = session.user;
-    const name = user.user_metadata?.user_name || user.email;
-    const avatar = user.user_metadata?.avatar_url;
-
-    loginBtn.style.display = 'none';
-    if (userInfo) {
-      userInfo.innerHTML =
-        (avatar ? `<img src="${escHtmlAuth(avatar)}" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">` : '') +
-        `<span style="margin-right:12px;font-size:14px">${escHtmlAuth(name)}</span>` +
-        `<button onclick="handleLogoutClick()" style="font-size:13px;padding:4px 10px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">Sign out</button>`;
-      userInfo.style.display = 'flex';
-      userInfo.style.alignItems = 'center';
-    }
-    // Show edit buttons
-    document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'flex');
-  } else {
-    window._githubToken = null;
-    loginBtn.style.display = '';
-    if (userInfo) {
-      userInfo.innerHTML = '';
-      userInfo.style.display = 'none';
-    }
-    // Hide edit buttons
-    document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'none');
-  }
-}
-
-async function initAuth() {
-  // Handle OAuth callback (Supabase puts session in URL hash)
-  const { data: { session } } = await supabase.auth.getSession();
-  updateAuthUI(session);
-
-  // Also listen for auth state changes
-  supabase.auth.onAuthStateChange((_event, session) => {
-    updateAuthUI(session);
-  });
-}
-</script>
-
-<!-- =============================================
-     RENDER SCRIPT
-============================================= -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Supastack &middot; Projects</title>
+<meta name="description" content="Everything I'm building: personal apps, Airnest hospitality tech, and pilot tools.">
 <script>
 (function () {
-  'use strict';
-
-  /* ---------- Parse data ---------- */
-  const raw = document.getElementById('stack-data').textContent;
-  let data;
-  try {
-    data = JSON.parse(raw);
-  } catch (e) {
-    document.getElementById('main').innerHTML =
-      '<p style="color:red;padding:2rem;font-family:monospace">JSON parse error: ' + escHtml(e.message) + '</p>';
-    return;
+  var t = null;
+  try { t = localStorage.getItem('ass_theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
   }
-  const { sections, meta } = data;
-
-  /* ---------- Header + Footer dates ---------- */
-  document.getElementById('header-date').textContent = 'Updated: ' + meta.lastUpdated;
-  document.getElementById('footer-meta').textContent =
-    'Last updated: ' + meta.lastUpdated + ' · Maintained by ' + meta.owner;
-
-  /* ---------- Helpers ---------- */
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function renderLinks(links) {
-    if (!links || links.length === 0) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
-    return '<div class="link-badges">' +
-      links.map(l =>
-        // SECURITY: When editing is added, validate l.url starts with https:// or http://
-        // to prevent javascript: URI injection.
-        `<a class="link-badge" href="${escHtml(l.url)}" target="_blank" rel="noopener">${escHtml(l.label)}</a>`
-      ).join('') +
-      '</div>';
-  }
-
-  function renderNotes(notes) {
-    if (!notes) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
-    // notes may contain <code> tags — we allow them through (data is trusted)
-    // SECURITY: notes is injected as raw HTML to allow <code> tags.
-    // When editing is added, sanitize notes through DOMPurify before rendering.
-    return `<details class="notes-details">
-      <summary>notes</summary>
-      <div class="notes-content">${typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes}</div>
-    </details>`;
-  }
-
-  function renderSubEntries(subEntries) {
-    // s.notes may contain <code> tags — sanitized via DOMPurify, same as renderNotes
-    if (!subEntries || subEntries.length === 0) return '';
-    const items = subEntries.map(s =>
-      `<li class="sub-entry">
-        <span class="sub-entry-name">${escHtml(s.id)}</span>
-        <span class="sub-entry-notes">${s.notes ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(s.notes) : s.notes) : ''}</span>
-      </li>`
-    ).join('');
-    return `<ul class="sub-entries">${items}</ul>`;
-  }
-
-  function renderEntry(entry, sectionId) {
-    return `<tr class="entry-row" id="entry-${escHtml(entry.id)}">
-      <td>
-        <div class="entry-name">${escHtml(entry.name)}</div>
-        ${entry.version ? `<div class="entry-version">${escHtml(entry.version)}</div>` : ''}
-      </td>
-      <td class="links-cell">${renderLinks(entry.links)}</td>
-      <td class="notes-cell">${renderNotes(entry.notes)}${renderSubEntries(entry.subEntries)}</td>
-      <td style="width:1px;white-space:nowrap">
-        <div class="edit-controls" data-entry-id="${escHtml(entry.id)}" data-section-id="${escHtml(sectionId)}">
-          <button class="btn-edit" onclick="startEditEntry('${escHtml(sectionId)}', '${escHtml(entry.id)}')">Edit</button>
-          <button class="btn-delete" onclick="deleteEntry('${escHtml(sectionId)}', '${escHtml(entry.id)}')">Delete</button>
-        </div>
-      </td>
-    </tr>`;
-  }
-
-  function renderSection(section) {
-    const entriesHtml = section.entries.map(e => renderEntry(e, section.id)).join('');
-    return `
-      <section class="stack-section" id="section-${escHtml(section.id)}">
-        <div class="section-header">
-          <span class="section-order">${section.order}</span>
-          <h2 class="section-title">${escHtml(section.title)}</h2>
-        </div>
-        <table class="entries-table">
-          <thead>
-            <tr>
-              <th style="width:180px">Tool</th>
-              <th>Links</th>
-              <th>Notes</th>
-              <th class="edit-controls" style="width:1px"></th>
-            </tr>
-          </thead>
-          <tbody>${entriesHtml}</tbody>
-        </table>
-      </section>`;
-  }
-
-  /* ---------- Build TOC ---------- */
-  const tocList = document.getElementById('toc-list');
-  const mobileSelect = document.getElementById('mobile-select');
-
-  sections.forEach(section => {
-    // Sidebar TOC item
-    const li = document.createElement('li');
-    li.className = 'toc-item';
-    li.dataset.id = section.id;
-    li.innerHTML = `<a href="#section-${escHtml(section.id)}">
-      <span class="toc-num">${section.order}</span>
-      ${escHtml(section.title)}
-    </a>`;
-    tocList.appendChild(li);
-
-    // Mobile select option
-    const opt = document.createElement('option');
-    opt.value = section.id;
-    opt.textContent = section.order + '. ' + section.title;
-    mobileSelect.appendChild(opt);
-  });
-
-  /* ---------- Build main content ---------- */
-  const main = document.getElementById('main');
-  main.innerHTML = sections.map(renderSection).join('');
-
-  /* ---------- Active TOC highlighting (Intersection Observer) ---------- */
-  const sectionEls = Array.from(document.querySelectorAll('.stack-section'));
-  const tocLinks = Array.from(document.querySelectorAll('.toc-item a'));
-  const tocItemMap = {};
-  tocLinks.forEach(a => {
-    const id = a.getAttribute('href').replace('#section-', '');
-    tocItemMap[id] = a;
-  });
-
-  let activeId = null;
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id.replace('section-', '');
-        if (id !== activeId) {
-          if (activeId && tocItemMap[activeId]) tocItemMap[activeId].classList.remove('active');
-          activeId = id;
-          if (tocItemMap[id]) tocItemMap[id].classList.add('active');
-        }
-      }
-    });
-  }, {
-    rootMargin: '-10% 0px -60% 0px',
-    threshold: 0
-  });
-
-  window._stackObserver = io;
-  sectionEls.forEach(el => io.observe(el));
-
-  /* ---------- Init auth ---------- */
-  initAuth();
-
+  document.documentElement.setAttribute('data-theme', t);
 })();
 </script>
+<style>
+:root {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+  --maxw: 880px;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+[data-theme="light"] {
+  --bg: #f5f5f2;
+  --bg-grad: radial-gradient(1200px 600px at 78% -10%, #eef0ec 0%, transparent 60%);
+  --surface: #ffffff; --surface-2: #fafaf8;
+  --text: #17171a; --text-2: #51515a; --muted: #8b8b93;
+  --border: #e7e7e2; --border-strong: #d8d8d2;
+  --accent: #15803d; --accent-2: #16a34a;
+  --accent-weak: rgba(21, 128, 61, .10); --accent-line: rgba(21, 128, 61, .28);
+  --shadow-card: 0 1px 0 rgba(24, 24, 27, .03);
+}
+[data-theme="dark"] {
+  --bg: #0b0b0c;
+  --bg-grad: radial-gradient(1100px 560px at 80% -12%, #15171a 0%, transparent 62%);
+  --surface: #141416; --surface-2: #1a1a1d;
+  --text: #f3f3f2; --text-2: #b4b4bb; --muted: #76767f;
+  --border: #242427; --border-strong: #323237;
+  --accent: #4ade80; --accent-2: #34d399;
+  --accent-weak: rgba(74, 222, 128, .12); --accent-line: rgba(74, 222, 128, .32);
+  --shadow-card: 0 1px 0 rgba(0, 0, 0, .25);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; min-height: 100vh;
+  font-family: var(--font-body);
+  background: var(--bg); background-image: var(--bg-grad); background-attachment: fixed;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  transition: background-color .35s var(--ease), color .35s var(--ease);
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--accent-weak); }
 
-<!-- =============================================
-     FLOATING ADD ENTRY BUTTON
-============================================= -->
-<button id="add-entry-btn" class="edit-controls" onclick="openAddModal()"
-  style="position:fixed;bottom:24px;right:24px;padding:10px 18px;background:#0969da;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.15)">
-  + Add Entry
-</button>
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px clamp(18px, 5vw, 44px);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 9px; }
+.brand-mark {
+  width: 12px; height: 12px; border-radius: 3px;
+  background: var(--accent); box-shadow: 0 0 0 4px var(--accent-weak);
+}
+.brand-text { font-family: var(--font-display); font-weight: 700; letter-spacing: -.01em; }
+#theme-toggle {
+  appearance: none; border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-2); border-radius: var(--r-sm);
+  width: 34px; height: 30px; font-size: 15px; line-height: 1; cursor: pointer;
+  transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+#theme-toggle:hover { border-color: var(--border-strong); color: var(--text); }
 
-<!-- =============================================
-     ENTRY MODAL
-============================================= -->
-<div id="entry-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:12px;padding:32px;width:560px;max-width:90vw;max-height:90vh;overflow-y:auto">
-    <h3 id="modal-title" style="margin:0 0 20px">Add Entry</h3>
-    <form id="entry-form" onsubmit="return false">
-      <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Section</label>
-      <select id="modal-section" style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:16px;font-size:14px"></select>
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 40px clamp(18px, 5vw, 44px) 24px; }
+.intro h1 {
+  font-family: var(--font-display); font-size: clamp(30px, 5vw, 42px);
+  letter-spacing: -.02em; margin: 0 0 10px;
+}
+.tagline { color: var(--text-2); font-size: 16px; line-height: 1.55; margin: 0 0 6px; max-width: 60ch; }
+.count { color: var(--muted); font-family: var(--font-mono); font-size: 12.5px; }
 
-      <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Name</label>
-      <input id="modal-name" type="text" style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:16px;font-size:14px;box-sizing:border-box">
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 8px; }
+.chip {
+  appearance: none; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+  border-radius: 999px; padding: 6px 13px; font-size: 13.5px; font-family: var(--font-body);
+  transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+}
+.chip:hover { border-color: var(--border-strong); color: var(--text); }
+.chip.active { border-color: var(--accent-line); background: var(--accent-weak); color: var(--text); }
+.chip-n { color: var(--muted); font-family: var(--font-mono); font-size: 11px; margin-left: 2px; }
+.chip.active .chip-n { color: var(--accent); }
 
-      <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Version</label>
-      <input id="modal-version" type="text" placeholder="e.g. v1.0.0 or leave blank" style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:16px;font-size:14px;box-sizing:border-box">
+.group { margin-top: 34px; }
+.group-head {
+  display: flex; align-items: baseline; gap: 12px;
+  border-bottom: 1px solid var(--border); padding-bottom: 9px; margin-bottom: 14px;
+}
+.group-head h2 {
+  font-family: var(--font-display); font-size: 19px; letter-spacing: -.01em; margin: 0;
+}
+.group-count { color: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+.cards { display: flex; flex-direction: column; gap: 10px; }
 
-      <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Links</label>
-      <div id="modal-links-container"></div>
-      <button type="button" onclick="addLinkField()" style="font-size:13px;color:#0969da;background:none;border:none;cursor:pointer;padding:0;margin-bottom:16px">+ Add link</button>
+.card {
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface); box-shadow: var(--shadow-card);
+  transition: border-color .2s var(--ease);
+}
+.card:hover { border-color: var(--border-strong); }
+.card[open] { border-color: var(--accent-line); }
+.card summary {
+  position: relative; display: block; cursor: pointer;
+  padding: 14px 16px 14px 38px; list-style: none;
+}
+.card summary::-webkit-details-marker { display: none; }
+.card summary:focus-visible { outline: 2px solid var(--accent-line); border-radius: var(--r-md); }
+.chev {
+  position: absolute; left: 15px; top: 19px;
+  width: 7px; height: 7px;
+  border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted);
+  transform: rotate(-45deg); transition: transform .22s var(--ease);
+}
+.card[open] .chev { transform: rotate(45deg); border-color: var(--accent); }
+.card-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.card-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: -.01em; }
+.card-open {
+  font-family: var(--font-mono); font-size: 12px; color: var(--accent);
+  border: 1px solid var(--accent-line); border-radius: 999px; padding: 2px 10px;
+  transition: background .2s var(--ease);
+}
+.card-open:hover { background: var(--accent-weak); }
+.card-desc { display: block; margin-top: 5px; color: var(--text-2); font-size: 14px; line-height: 1.5; }
+.card-body { padding: 2px 16px 15px 38px; border-top: 1px dashed var(--border); margin: 0 0 0; }
+.card-body p { margin: 11px 0 0; color: var(--text-2); font-size: 14px; line-height: 1.65; max-width: 72ch; }
 
-      <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Notes</label>
-      <textarea id="modal-notes" rows="4" style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:24px;font-size:14px;box-sizing:border-box;resize:vertical"></textarea>
+.footer {
+  max-width: var(--maxw); margin: 26px auto 0; padding: 18px clamp(18px, 5vw, 44px) 42px;
+  display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between;
+  border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 13px;
+}
+.footer a { color: var(--text-2); }
+.footer a:hover { color: var(--accent); }
 
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button type="button" onclick="closeModal()" style="padding:8px 16px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">Cancel</button>
-        <button type="button" onclick="saveEntry()" id="modal-save-btn" style="padding:8px 16px;background:#0969da;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Save</button>
+@media (max-width: 560px) {
+  .card summary { padding-left: 32px; }
+  .card-body { padding-left: 32px; }
+  .chev { left: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark"></span><span class="brand-text">AI Supastack</span></div>
+  <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme">&#9681;</button>
+</header>
+<main class="wrap">
+  <section class="intro">
+    <h1>Projects</h1>
+    <p class="tagline">Everything I'm building: personal apps, Airnest hospitality tech, and pilot tools. Click a project to expand its description.</p>
+    <span class="count">23 projects &middot; updated 2026-09-03</span>
+  </section>
+  <div class="chips">
+        <button class="chip active" type="button" data-filter="all">All <span class="chip-n">23</span></button>
+        <button class="chip" type="button" data-filter="personal">Personal <span class="chip-n">11</span></button>
+        <button class="chip" type="button" data-filter="airnest">Airnest <span class="chip-n">9</span></button>
+        <button class="chip" type="button" data-filter="pilot">Pilot <span class="chip-n">3</span></button>
+  </div>
+    <section class="group" data-group="personal">
+      <div class="group-head">
+        <h2>Personal</h2>
+        <span class="group-count">11 projects</span>
       </div>
-    </form>
-  </div>
-</div>
-
-<!-- =============================================
-     SECTION MODAL
-============================================= -->
-<div id="section-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center" role="dialog" aria-modal="true" aria-labelledby="section-modal-title">
-  <div style="background:#fff;border-radius:12px;padding:32px;width:420px;max-width:90vw">
-    <h3 id="section-modal-title" style="margin:0 0 20px">Add Section</h3>
-    <label style="display:block;margin-bottom:4px;font-size:13px;font-weight:600">Section Title</label>
-    <input id="section-title-input" type="text" placeholder="e.g. Password Manager"
-      style="width:100%;padding:8px;border:1px solid #d0d7de;border-radius:6px;margin-bottom:24px;font-size:14px;box-sizing:border-box">
-    <div style="display:flex;gap:8px;justify-content:flex-end">
-      <button type="button" onclick="closeSectionModal()" style="padding:8px 16px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">Cancel</button>
-      <button type="button" onclick="saveSection()" style="padding:8px 16px;background:#0969da;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Add</button>
-    </div>
-  </div>
-</div>
-
-<!-- =============================================
-     EDIT / COMMIT SCRIPT
-============================================= -->
-<script>
-/* ---------- Helpers ---------- */
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function getCurrentData() {
-  return JSON.parse(document.getElementById('stack-data').textContent);
-}
-
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:80px;right:24px;background:#24292f;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:2000;opacity:0;transition:opacity 0.3s';
-  document.body.appendChild(toast);
-  setTimeout(() => toast.style.opacity = '1', 10);
-  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
-}
-
-/* ---------- Link field ---------- */
-function addLinkField(label, url) {
-  label = label || '';
-  url = url || '';
-  const container = document.getElementById('modal-links-container');
-  const row = document.createElement('div');
-  row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px';
-  row.innerHTML =
-    '<input type="text" placeholder="Label" value="' + escHtml(label) + '" style="flex:1;padding:8px;border:1px solid #d0d7de;border-radius:6px;font-size:13px">' +
-    '<input type="text" placeholder="https://..." value="' + escHtml(url) + '" style="flex:2;padding:8px;border:1px solid #d0d7de;border-radius:6px;font-size:13px">' +
-    '<button type="button" onclick="this.parentElement.remove()" style="padding:4px 8px;border:1px solid #d0d7de;border-radius:6px;background:#f6f8fa;cursor:pointer">&#x2715;</button>';
-  container.appendChild(row);
-}
-
-/* ---------- Modal state ---------- */
-var _editingEntry = null; // { sectionId, entryId } when editing, null when adding
-
-function openAddModal() {
-  _editingEntry = null;
-  document.getElementById('modal-title').textContent = 'Add Entry';
-  document.getElementById('modal-name').value = '';
-  document.getElementById('modal-version').value = '';
-  document.getElementById('modal-notes').value = '';
-  document.getElementById('modal-links-container').innerHTML = '';
-  addLinkField();
-  var data = getCurrentData();
-  var select = document.getElementById('modal-section');
-  select.innerHTML = data.sections.map(function(s) {
-    return '<option value="' + escHtml(s.id) + '">' + escHtml(s.title) + '</option>';
-  }).join('');
-  document.getElementById('entry-modal').style.display = 'flex';
-  setTimeout(function() { document.getElementById('modal-section').focus(); }, 0);
-}
-
-function startEditEntry(sectionId, entryId) {
-  var data = getCurrentData();
-  var section = data.sections.find(function(s) { return s.id === sectionId; });
-  var entry = section && section.entries.find(function(e) { return e.id === entryId; });
-  if (!entry) return;
-  _editingEntry = { sectionId: sectionId, entryId: entryId };
-  document.getElementById('modal-title').textContent = 'Edit Entry';
-  document.getElementById('modal-name').value = entry.name;
-  document.getElementById('modal-version').value = entry.version || '';
-  document.getElementById('modal-notes').value = entry.notes || '';
-  document.getElementById('modal-links-container').innerHTML = '';
-  (entry.links || []).forEach(function(l) { addLinkField(l.label, l.url); });
-  var select = document.getElementById('modal-section');
-  select.innerHTML = data.sections.map(function(s) {
-    return '<option value="' + escHtml(s.id) + '">' + escHtml(s.title) + '</option>';
-  }).join('');
-  select.value = sectionId;
-  document.getElementById('entry-modal').style.display = 'flex';
-  setTimeout(function() { document.getElementById('modal-section').focus(); }, 0);
-}
-
-function closeModal() {
-  document.getElementById('entry-modal').style.display = 'none';
-  _editingEntry = null;
-}
-
-/* ---------- Save entry ---------- */
-async function saveEntry() {
-  var name = document.getElementById('modal-name').value.trim();
-  if (!name) { alert('Name is required'); return; }
-
-  var sectionId = document.getElementById('modal-section').value;
-  var version = document.getElementById('modal-version').value.trim();
-  var notes = document.getElementById('modal-notes').value.trim();
-
-  var linkRows = document.getElementById('modal-links-container').querySelectorAll('div');
-  var links = [];
-  linkRows.forEach(function(row) {
-    var inputs = row.querySelectorAll('input');
-    var lbl = inputs[0] && inputs[0].value.trim();
-    var url = inputs[1] && inputs[1].value.trim();
-    if (lbl && url && /^https?:\/\//i.test(url)) links.push({ label: lbl, url: url });
-  });
-
-  var data = getCurrentData();
-  var section = data.sections.find(function(s) { return s.id === sectionId; });
-  if (!section) return;
-
-  var editingSnapshot = _editingEntry;
-
-  if (editingSnapshot) {
-    var idx = section.entries.findIndex(function(e) { return e.id === editingSnapshot.entryId; });
-    if (idx >= 0) {
-      section.entries[idx] = Object.assign({}, section.entries[idx], { name: name, version: version, notes: notes, links: links });
+      <div class="cards">
+      <details class="card" id="p-ai-supastack">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">AI Supastack</span>
+            <a class="card-open" href="https://commanderwi11.github.io/AI_Supastack/" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">This site: a public index of everything I&#x27;m building, with an expandable description for each project</span>
+        </summary>
+        <div class="card-body"><p>The page you are looking at. A static, self-contained index of all my projects across personal, company, and aviation work, grouped by area, each with a short summary and an expandable longer description. Built as a single HTML file with no build step, no external scripts, and a light/dark theme, deployed on GitHub Pages. It replaced an earlier AI-tools wiki in September 2026.</p></div>
+      </details>
+      <details class="card" id="p-family-plan">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Family Plan</span>
+            <a class="card-open" href="https://family-plan.pages.dev" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Family logistics hub — school calendar, parental leave tracker, baby daily log, routines, health notes, and admin paperwork (Supabase auth)</span>
+        </summary>
+        <div class="card-body"><p>A private family logistics hub that brings the school calendar, parental-leave planning, a baby daily log, household routines, health notes and administrative paperwork tracking into one dashboard. Built as a static progressive web app with vanilla JavaScript and Supabase for authentication and cross-device sync, deployed on Cloudflare Pages. Bilingual by design, with Spanish used wherever content touches school and local admin. Live and actively used.</p></div>
+      </details>
+      <details class="card" id="p-family-trip-japan">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Family Trip Japan</span>
+            <a class="card-open" href="https://commanderwi11.github.io/Family_Trip_Japan/" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Trip planning site for a family journey through Japan — itinerary, destination cards, motorhome planner, and editable research notes</span>
+        </summary>
+        <div class="card-body"><p>A trip-planning site for an extended family journey through Japan, organising the route as day-by-day itinerary stages, destination cards, a campervan leg planner, logistics notes and an editable research and checklist area. Built with plain HTML, CSS and JavaScript as an installable progressive web app, with all notes and checklist state stored locally in the browser and no backend or login. Hosted on GitHub Pages. Live, updated as planning progresses.</p></div>
+      </details>
+      <details class="card" id="p-family-week">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Family Week</span>
+            <a class="card-open" href="https://family-week.pages.dev" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Weekly family planning ritual — traditions, meals, routines, and shopping list, synced between partners via Supabase</span>
+        </summary>
+        <div class="card-body"><p>A weekly family planning app that turns the household&#x27;s Sunday planning ritual into a shared board covering traditions, meals, routines and the shopping list, plus a history view and a printable weekly sheet. Built as a vanilla JavaScript progressive web app with Supabase for auth and real-time data, so both partners see the same plan from their own devices, and deployed on Cloudflare Pages. Live and in weekly use.</p></div>
+      </details>
+      <details class="card" id="p-byd-control">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">BYD Control</span>
+            <a class="card-open" href="https://byd-control.vercel.app" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Remote control dashboard and CLI for the BYD Seal U DM-i — lock/unlock, charging, climate, locate, horn, and live vehicle status</span>
+        </summary>
+        <div class="card-body"><p>A remote control dashboard for a plug-in hybrid vehicle, exposing lock/unlock, charging start/stop, climate and defrost, horn, vehicle locating and live status (range, doors, charge state) through both a web UI and a companion command-line tool. The web app is built with Next.js, React and Tailwind with OAuth-based single-user access control and is deployed on Vercel; the CLI is TypeScript with local keychain-style credential storage, and the vehicle API layer is covered by unit tests. Includes handling for the car&#x27;s telematics sleep state so cached readings are clearly flagged as stale. Live and functional.</p></div>
+      </details>
+      <details class="card" id="p-home-quest-qh">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Home Quest QH</span>
+            <a class="card-open" href="https://commanderwi11.github.io/Home_Quest_QH/" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Daily automated family house search for Gran Canaria — harvests Idealista, has Claude research and rank each candidate against the family brief (budget, bedrooms, garden, office), publishes a Top-5 + Favorites dashboard</span>
+        </summary>
+        <div class="card-body"><p>An automated daily house-hunting pipeline for a family home search on Gran Canaria. Each night it harvests fresh listings from the main Spanish property portal via a browser-driven scraper, then has a headless Claude agent open and deeply research each serious candidate against cross-portal data and a written family rubric, before a validation stage folds the results into a published dashboard of the day&#x27;s Top 5 plus starred favourites and a browsable archive of previous runs. Built in Python with Playwright, a JSON data contract and pytest coverage, running two independent search tracks (a target district and the wider island) and publishing to a static GitHub Pages site. Active, running daily.</p></div>
+      </details>
+      <details class="card" id="p-my-projects-hub">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">My Projects Hub</span>
+            <a class="card-open" href="https://commanderwi11.github.io/My_Projects_Hub/" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Password-gated index and one-click launcher for all projects across Personal, Airnest, and Pilot HQs</span>
+        </summary>
+        <div class="card-body"><p>A private index and one-click launcher for every project across the personal, business and aviation workspaces, rendering a manifest of projects and their runnable actions with live streamed output for each run. Built as a zero-dependency Node server plus a minimalist static console UI, with layered access control: unrestricted on the local machine, password plus TOTP login for remote access over a Tailscale tunnel with an extra step-up check, and sensitive actions blocked entirely outside the local machine. A public landing page is published separately on GitHub Pages while the project manifest and server code stay unpublished. Live and actively extended.</p></div>
+      </details>
+      <details class="card" id="p-whoop-whatsapp">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Whoop WhatsApp</span>
+            <a class="card-open" href="https://whoop-whatsapp.vercel.app" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Twice-daily pipeline: fetches WHOOP health data and emails structured metrics to a WhatsApp coaching bot for interpretation</span>
+        </summary>
+        <div class="card-body"><p>A multi-tenant data pipeline that connects to the WHOOP developer API, pulls each user&#x27;s latest recovery, sleep, and workout metrics twice a day, and emails a structured JSON payload to a downstream WhatsApp coaching bot that turns it into a readable briefing. Deliberately scoped as a reliable data pipe with no interpretation logic of its own, it handles OAuth token storage, per-user timezone scheduling, and strict tenant isolation. Built with Next.js and React on Vercel, with Supabase for the database, row-level security, and scheduled edge functions, plus Resend for transactional email. Active and running on schedule.</p></div>
+      </details>
+      <details class="card" id="p-bsa-options">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">BSA Options</span>
+            <a class="card-open" href="https://bsa-options.pages.dev" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Automated Idealista inbox sync, buyer triage, pipeline tracking, and AI-drafted replies for the Gran Canaria apartment sale</span>
+        </summary>
+        <div class="card-body"><p>An automation toolkit for marketing and selling a residential property through Spanish real-estate portals. It logs into the listing portal with a persistent browser session, syncs the message inbox, classifies incoming enquiries to separate genuine buyers from agency solicitations, tracks each conversation through a staged pipeline, and generates reply drafts that a human reviews and approves before anything is sent. Written in Node.js and TypeScript with Playwright for portal automation, SQLite for local storage, the Anthropic SDK for triage and drafting, and Vitest for tests; a local review dashboard plus an access-gated static snapshot published to Cloudflare Pages provide the front end. Active, running on a daily automated cycle with human approval in the loop.</p></div>
+      </details>
+      <details class="card" id="p-flight-portal">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Flight Portal (Angelita)</span>
+            <a class="card-open" href="https://angelita-vuelos.vercel.app" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Flight search portal for my mother — find and request round-trips or one-way flights, with email confirmation via Resend</span>
+        </summary>
+        <div class="card-body"><p>A small Spanish-language flight search portal designed for a non-technical relative, letting them look up round-trip or one-way itineraries, pick outbound and return legs from time-sorted results, and submit a request that is emailed onward for booking. The interface is intentionally simple, with trip-type toggles, full airline names alongside flight numbers, and a plain-language confirmation screen. Built on Next.js and React with Tailwind CSS, a third-party flight data API for schedules, and Resend for email notifications, deployed on Vercel with a test suite covering the search and request flows. Live and in use, with an updated visual design ready to ship.</p></div>
+      </details>
+      <details class="card" id="p-pilot-finance">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Pilot Finance</span>
+            <a class="card-open" href="https://github.com/CommanderWi11/Pilot_Finance" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Next.js + Supabase web app for tracking pilot personal finances — payslips, expenses, and charts</span>
+        </summary>
+        <div class="card-body"><p>A personal finance web app tailored to airline pilots, whose pay varies month to month with flight hours, allowances, and per-diems. It ingests payslips, records and categorises expenses, and renders trends and breakdowns as interactive charts so income variability and spending patterns are visible over time. Built with Next.js on the App Router, Supabase for authentication, Postgres storage and row-level security, Recharts for visualisation, Tailwind CSS for styling, and the Anthropic SDK for assisted document parsing and insights. Active and under ongoing development.</p></div>
+      </details>
+      </div>
+    </section>
+    <section class="group" data-group="airnest">
+      <div class="group-head">
+        <h2>Airnest</h2>
+        <span class="group-count">9 projects</span>
+      </div>
+      <div class="cards">
+      <details class="card" id="p-airnest-shared">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Airnest Shared</span>
+            <a class="card-open" href="https://airnest-homes-sl.github.io/airnest-shared/" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Password-gated internal portal publishing CEO briefings, integration reports, and operational snapshots</span>
+        </summary>
+        <div class="card-body"><p>A lightweight publishing surface for Airnest&#x27;s internal documents: CEO briefings, integration status reports, meeting briefs, and operational snapshots, each rendered as a self-contained HTML artifact behind an access-gated landing page. It is a static site (hand-written HTML, CSS, and vanilla JS on GitHub Pages) built around a shared house style, with reusable document and email templates and an auto-sorting, newest-first archive index. Live and in routine use, it also acts as the publishing target for the weekly operations briefing pipeline.</p></div>
+      </details>
+      <details class="card" id="p-weekly-ops-briefing">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Weekly Ops Briefing</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Automated Monday CEO briefing pipeline — Claude reads all project files + Gmail, generates a reviewed report, and emails the CEO after my approval</span>
+        </summary>
+        <div class="card-body"><p>An automated weekly briefing pipeline that produces a short, bottom-line-first operations report for the CEO. A scheduled job runs Claude Code headlessly to read every project&#x27;s working files plus the prior week&#x27;s company email, drafts the briefing in markdown and light HTML, emails it for review, and then sends the approved version on, applying any inline corrections the reviewer replies with. Built from shell scripts, a macOS scheduler, and a Gmail integration; it has been running weekly since May 2026, with message threading so each edition chains into a single ongoing conversation.</p></div>
+      </details>
+      <details class="card" id="p-mews-api-connector">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Mews API Connector</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL/mews-api-connector" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Certified Mews integration client — stdlib-only Python wrappers for reservations, bills, and customers across all 8 properties</span>
+        </summary>
+        <div class="card-body"><p>A certified private-integration client for the Mews hospitality PMS, covering the certification process and the reusable code that came out of it. The client is dependency-free Python (3.10+, standard library only) with modules for reservations, bills, customers, and property configuration, per-property and portfolio access tokens supplied via environment variables, plus a recipe book and read/write test suites. Certification is complete and production credentials are in place across all eight properties; the client is in active use and packaged to be portable enough for the CEO to run his own instance.</p></div>
+      </details>
+      <details class="card" id="p-guesty-mews-migration">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Guesty–Mews Migration</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Active PMS migration for all 8 Airnest properties from Guesty to Mews — API probes, field mapping, reservation imports, and per-property runbooks</span>
+        </summary>
+        <div class="card-body"><p>The working project for moving all eight Airnest properties off Guesty and onto Mews. It covers API probing on both platforms, an entity-by-entity map of what can be migrated programmatically versus rebuilt by hand, reservation and guest import file builders, per-property configuration runbooks, and user and role setup, using Python for extraction and transformation, spreadsheet import templates for the Mews side, and browser automation for interfaces with no API. Active and running property by property on a staged go-live schedule, with several hotels already fully migrated.</p></div>
+      </details>
+      <details class="card" id="p-gestor-hospedajes">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Gestor Hospedajes</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL/Gestor_Hospedajes" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Multi-tenant SaaS auto-filing Spanish SES.Hospedajes guest reports — per-unit owner remapping, XML PV/RH builders, SOAP submission</span>
+        </summary>
+        <div class="card-body"><p>A multi-tenant service that automates Spanish SES.Hospedajes guest reporting (RD 933/2021) for lodging operators, with per-unit remapping of owner registration numbers: the case native PMS integrations do not handle. The Python engine models reservations, validates and quarantines incomplete records rather than filing them, builds the PV and RH XML documents, and submits them over SOAP (ZIP plus Base64 payloads) or emits bulk-upload files; a Next.js dashboard and Postgres/Supabase job queue are designed but intentionally dormant. Built to EU data-residency and GDPR constraints, including a strict field allowlist and no storage of identity-document images. The engine core is complete and covered by tests, with the single-tenant filing mode shipping first.</p></div>
+      </details>
+      <details class="card" id="p-airnest-ops-brain">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Airnest Ops Brain</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Architecture for Airnest&#x27;s internal intelligence layer — FastMCP + SQLite data lake connecting 9 tools; Mews webhook receiver live on a cloud VPS</span>
+        </summary>
+        <div class="card-body"><p>The architecture and phased plan for Airnest&#x27;s internal intelligence layer: a FastMCP server backed by a local SQLite data lake that consolidates the PMS, housekeeping, revenue management, accounting, banking, guest communications, HR, and energy-consumption systems into one queryable source, refreshed by a nightly sync plus real-time PMS webhooks. A first component is already deployed: a Mews webhook receiver running as a FastAPI service behind Nginx with TLS on a small cloud VPS. The wider build is deliberately on hold behind the PMS migration and the guest-communications rollout, with the full schema, tool inventory, and phase gates documented in the meantime.</p></div>
+      </details>
+      <details class="card" id="p-conduit-onboarding">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Conduit Onboarding</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Procurement tracker for Conduit.ai as Airnest&#x27;s AI front-desk — WhatsApp, OTA inbox, email, voice AI, and Mews integration</span>
+        </summary>
+        <div class="card-body"><p>A procurement and onboarding workspace for adopting Conduit as Airnest&#x27;s AI front desk, covering guest messaging across WhatsApp, OTA inboxes, email, and voice, connected to the PMS. It tracks commercial negotiation, listing and property configuration, staff workflows, and an ongoing defect log, and includes a scheduled automation that reads the mailbox, reconciles a Notion bug tracker, and emails a weekly change report. The platform is live in production with high automation coverage; commercial terms and the open defect backlog remain under active review, alongside a documented plan to reassess once the PMS ships native guest messaging.</p></div>
+      </details>
+      <details class="card" id="p-infrastructure-setup">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Infrastructure Setup</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL/infrastructure-setup" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Living inventory and change log for all Airnest HQ infrastructure — where every repo, service, secret, and shared doc lives</span>
+        </summary>
+        <div class="card-body"><p>A living inventory and change log for Airnest&#x27;s technical setup, a reference project rather than a codebase. It records where every repository, hosted service, domain, certificate, scheduled job, and shared document lives, plus pointers to where each secret is stored (never the values themselves), and requires a dated entry for any infrastructure change. The initial consolidation into a company-owned GitHub organisation is complete, and the inventory is maintained as the source of truth for &#x27;where does this live?&#x27; questions.</p></div>
+      </details>
+      <details class="card" id="p-siteminder-workshop">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">SiteMinder Workshop</span>
+            <a class="card-open" href="https://github.com/Airnest-Homes-SL" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Sets up SiteMinder as Airnest&#x27;s channel manager between Mews and the OTAs (Booking.com, Airbnb, Expedia) — account/property config, activation, go-live tracking</span>
+        </summary>
+        <div class="card-body"><p>Sets up SiteMinder as the channel manager sitting between Mews and the OTAs, so availability and rates push outward and bookings flow back in. Scope covers account and property configuration, room-type and rate-plan mapping between the two systems, scraping and normalising property and room descriptions so listings launch complete, and OTA channel mapping with go-live checks. Research recorded here established that SiteMinder exposes no configuration write API to hotelier customers, so setup is done through the web UI with browser automation for repetitive edits. The first property&#x27;s room types are configured and verified and the Mews link has passed testing, with activation and a possible PMS-native channel-manager alternative still being evaluated.</p></div>
+      </details>
+      </div>
+    </section>
+    <section class="group" data-group="pilot">
+      <div class="group-head">
+        <h2>Pilot</h2>
+        <span class="group-count">3 projects</span>
+      </div>
+      <div class="cards">
+      <details class="card" id="p-crew-briefing">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Crew Briefing</span>
+            <a class="card-open" href="https://github.com/CommanderWi11/Crew-Briefing" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Automated pre-flight briefing for Binter E195-E2 — headless Playwright PDF scraper, weather and NOTAM extraction, and HTML email timed to STD−90min via launchd</span>
+        </summary>
+        <div class="card-body"><p>A Python pipeline that assembles a complete pre-flight briefing for E195-E2 operations without manual work: it logs into the airline&#x27;s flight-planning and operations portals headlessly with Playwright, downloads the operational flight plan and related PDFs, and extracts weather, NOTAMs, route data and open deferred-maintenance (MEL/CDL) items into a single structured brief. Output is a styled HTML email with generated PDF attachments (flight-level and wind tables, and an indexed MEL extract), delivered on a schedule keyed to scheduled departure time. It also includes a fuel-first cruise advisor that interpolates published aircraft performance tables to suggest optimum level and Mach, and refuses to extrapolate outside the published data. Built with Python, Playwright and PDF parsing libraries; actively used on the line and backed by roughly 250 automated tests.</p></div>
+      </details>
+      <details class="card" id="p-flight-bag">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">Flight Bag</span>
+            <a class="card-open" href="https://github.com/CommanderWi11/Flight_Bag" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">Pilot operations suite — daily Binter Gmail capture and classification, Monday manual mirror with highlight promotion, and dual-mode pre-flight schedule digest</span>
+        </summary>
+        <div class="card-body"><p>A pilot operations suite that keeps day-to-day airline paperwork current and pushes only what matters into the inbox. It performs a daily read-only capture of company email and schedule data, classifies communications by type, mirrors the document manager on a weekly schedule to pull down new manual revisions, and automatically carries a pilot&#x27;s PDF highlights across from the superseded revision to the new one. A dual-mode digest email covers either the working day or the eve of a duty block, listing new communications, attaching the relevant PDFs and flagging special activities such as line checks read from the parsed roster. Written in Python with the Gmail API, headless browser automation and PDF tooling; in production, having been narrowed in 2026 from a broader study hub into a focused operations data pipeline.</p></div>
+      </details>
+      <details class="card" id="p-ecrew-mcp">
+        <summary>
+          <span class="chev" aria-hidden="true"></span>
+          <span class="card-head">
+            <span class="card-name">eCrew MCP</span>
+            <a class="card-open" href="https://github.com/CommanderWi11/MCP_Projects" target="_blank" rel="noopener">Open&nbsp;&#8599;</a>
+          </span>
+          <span class="card-desc">MCP server for Binter eCrew portal — headless login, monthly roster PDF download, structured parsing of flights and standby duties, and Claude tool exposure</span>
+        </summary>
+        <div class="card-body"><p>A Model Context Protocol server that makes the airline&#x27;s crew portal queryable from Claude. It performs a headless Playwright login, navigates the scheduling module to export the monthly roster PDF, and parses it into structured JSON (flights and legs with times, deadheads, standby and training duties, hotels and monthly statistics), with per-month caching and a scheduled pre-warm so downstream tools can read the data without logging in. Built in Node and TypeScript on the official MCP SDK over stdio, using pdfjs-dist for parsing, with credentials kept outside the repository and an offline test suite run against fixtures. Version 1 is shipped and verified end to end, has survived a portal front-end redesign, and its cached output feeds the other pilot projects.</p></div>
+      </details>
+      </div>
+    </section>
+</main>
+<footer class="footer">
+  <a href="whoop-guide.html">WHOOP Daily Briefings setup guide &#8594;</a>
+  <span><a href="https://github.com/CommanderWi11/AI_Supastack" target="_blank" rel="noopener">View on GitHub</a></span>
+</footer>
+<script type="application/json" id="projects-data">
+{
+  "updated": "2026-09-03",
+  "groups": [
+    {
+      "id": "personal",
+      "label": "Personal",
+      "projects": [
+        {
+          "id": "ai-supastack",
+          "name": "AI Supastack",
+          "url": "https://commanderwi11.github.io/AI_Supastack/",
+          "desc": "This site: a public index of everything I'm building, with an expandable description for each project",
+          "long": "The page you are looking at. A static, self-contained index of all my projects across personal, company, and aviation work, grouped by area, each with a short summary and an expandable longer description. Built as a single HTML file with no build step, no external scripts, and a light/dark theme, deployed on GitHub Pages. It replaced an earlier AI-tools wiki in September 2026."
+        },
+        {
+          "id": "family-plan",
+          "name": "Family Plan",
+          "url": "https://family-plan.pages.dev",
+          "desc": "Family logistics hub — school calendar, parental leave tracker, baby daily log, routines, health notes, and admin paperwork (Supabase auth)",
+          "long": "A private family logistics hub that brings the school calendar, parental-leave planning, a baby daily log, household routines, health notes and administrative paperwork tracking into one dashboard. Built as a static progressive web app with vanilla JavaScript and Supabase for authentication and cross-device sync, deployed on Cloudflare Pages. Bilingual by design, with Spanish used wherever content touches school and local admin. Live and actively used."
+        },
+        {
+          "id": "family-trip-japan",
+          "name": "Family Trip Japan",
+          "url": "https://commanderwi11.github.io/Family_Trip_Japan/",
+          "desc": "Trip planning site for a family journey through Japan — itinerary, destination cards, motorhome planner, and editable research notes",
+          "long": "A trip-planning site for an extended family journey through Japan, organising the route as day-by-day itinerary stages, destination cards, a campervan leg planner, logistics notes and an editable research and checklist area. Built with plain HTML, CSS and JavaScript as an installable progressive web app, with all notes and checklist state stored locally in the browser and no backend or login. Hosted on GitHub Pages. Live, updated as planning progresses."
+        },
+        {
+          "id": "family-week",
+          "name": "Family Week",
+          "url": "https://family-week.pages.dev",
+          "desc": "Weekly family planning ritual — traditions, meals, routines, and shopping list, synced between partners via Supabase",
+          "long": "A weekly family planning app that turns the household's Sunday planning ritual into a shared board covering traditions, meals, routines and the shopping list, plus a history view and a printable weekly sheet. Built as a vanilla JavaScript progressive web app with Supabase for auth and real-time data, so both partners see the same plan from their own devices, and deployed on Cloudflare Pages. Live and in weekly use."
+        },
+        {
+          "id": "byd-control",
+          "name": "BYD Control",
+          "url": "https://byd-control.vercel.app",
+          "desc": "Remote control dashboard and CLI for the BYD Seal U DM-i — lock/unlock, charging, climate, locate, horn, and live vehicle status",
+          "long": "A remote control dashboard for a plug-in hybrid vehicle, exposing lock/unlock, charging start/stop, climate and defrost, horn, vehicle locating and live status (range, doors, charge state) through both a web UI and a companion command-line tool. The web app is built with Next.js, React and Tailwind with OAuth-based single-user access control and is deployed on Vercel; the CLI is TypeScript with local keychain-style credential storage, and the vehicle API layer is covered by unit tests. Includes handling for the car's telematics sleep state so cached readings are clearly flagged as stale. Live and functional."
+        },
+        {
+          "id": "home-quest-qh",
+          "name": "Home Quest QH",
+          "url": "https://commanderwi11.github.io/Home_Quest_QH/",
+          "desc": "Daily automated family house search for Gran Canaria — harvests Idealista, has Claude research and rank each candidate against the family brief (budget, bedrooms, garden, office), publishes a Top-5 + Favorites dashboard",
+          "long": "An automated daily house-hunting pipeline for a family home search on Gran Canaria. Each night it harvests fresh listings from the main Spanish property portal via a browser-driven scraper, then has a headless Claude agent open and deeply research each serious candidate against cross-portal data and a written family rubric, before a validation stage folds the results into a published dashboard of the day's Top 5 plus starred favourites and a browsable archive of previous runs. Built in Python with Playwright, a JSON data contract and pytest coverage, running two independent search tracks (a target district and the wider island) and publishing to a static GitHub Pages site. Active, running daily."
+        },
+        {
+          "id": "my-projects-hub",
+          "name": "My Projects Hub",
+          "url": "https://commanderwi11.github.io/My_Projects_Hub/",
+          "desc": "Password-gated index and one-click launcher for all projects across Personal, Airnest, and Pilot HQs",
+          "long": "A private index and one-click launcher for every project across the personal, business and aviation workspaces, rendering a manifest of projects and their runnable actions with live streamed output for each run. Built as a zero-dependency Node server plus a minimalist static console UI, with layered access control: unrestricted on the local machine, password plus TOTP login for remote access over a Tailscale tunnel with an extra step-up check, and sensitive actions blocked entirely outside the local machine. A public landing page is published separately on GitHub Pages while the project manifest and server code stay unpublished. Live and actively extended."
+        },
+        {
+          "id": "whoop-whatsapp",
+          "name": "Whoop WhatsApp",
+          "url": "https://whoop-whatsapp.vercel.app",
+          "desc": "Twice-daily pipeline: fetches WHOOP health data and emails structured metrics to a WhatsApp coaching bot for interpretation",
+          "long": "A multi-tenant data pipeline that connects to the WHOOP developer API, pulls each user's latest recovery, sleep, and workout metrics twice a day, and emails a structured JSON payload to a downstream WhatsApp coaching bot that turns it into a readable briefing. Deliberately scoped as a reliable data pipe with no interpretation logic of its own, it handles OAuth token storage, per-user timezone scheduling, and strict tenant isolation. Built with Next.js and React on Vercel, with Supabase for the database, row-level security, and scheduled edge functions, plus Resend for transactional email. Active and running on schedule."
+        },
+        {
+          "id": "bsa-options",
+          "name": "BSA Options",
+          "url": "https://bsa-options.pages.dev",
+          "desc": "Automated Idealista inbox sync, buyer triage, pipeline tracking, and AI-drafted replies for the Gran Canaria apartment sale",
+          "long": "An automation toolkit for marketing and selling a residential property through Spanish real-estate portals. It logs into the listing portal with a persistent browser session, syncs the message inbox, classifies incoming enquiries to separate genuine buyers from agency solicitations, tracks each conversation through a staged pipeline, and generates reply drafts that a human reviews and approves before anything is sent. Written in Node.js and TypeScript with Playwright for portal automation, SQLite for local storage, the Anthropic SDK for triage and drafting, and Vitest for tests; a local review dashboard plus an access-gated static snapshot published to Cloudflare Pages provide the front end. Active, running on a daily automated cycle with human approval in the loop."
+        },
+        {
+          "id": "flight-portal",
+          "name": "Flight Portal (Angelita)",
+          "url": "https://angelita-vuelos.vercel.app",
+          "desc": "Flight search portal for my mother — find and request round-trips or one-way flights, with email confirmation via Resend",
+          "long": "A small Spanish-language flight search portal designed for a non-technical relative, letting them look up round-trip or one-way itineraries, pick outbound and return legs from time-sorted results, and submit a request that is emailed onward for booking. The interface is intentionally simple, with trip-type toggles, full airline names alongside flight numbers, and a plain-language confirmation screen. Built on Next.js and React with Tailwind CSS, a third-party flight data API for schedules, and Resend for email notifications, deployed on Vercel with a test suite covering the search and request flows. Live and in use, with an updated visual design ready to ship."
+        },
+        {
+          "id": "pilot-finance",
+          "name": "Pilot Finance",
+          "url": "https://github.com/CommanderWi11/Pilot_Finance",
+          "desc": "Next.js + Supabase web app for tracking pilot personal finances — payslips, expenses, and charts",
+          "long": "A personal finance web app tailored to airline pilots, whose pay varies month to month with flight hours, allowances, and per-diems. It ingests payslips, records and categorises expenses, and renders trends and breakdowns as interactive charts so income variability and spending patterns are visible over time. Built with Next.js on the App Router, Supabase for authentication, Postgres storage and row-level security, Recharts for visualisation, Tailwind CSS for styling, and the Anthropic SDK for assisted document parsing and insights. Active and under ongoing development."
+        }
+      ]
+    },
+    {
+      "id": "airnest",
+      "label": "Airnest",
+      "projects": [
+        {
+          "id": "airnest-shared",
+          "name": "Airnest Shared",
+          "url": "https://airnest-homes-sl.github.io/airnest-shared/",
+          "desc": "Password-gated internal portal publishing CEO briefings, integration reports, and operational snapshots",
+          "long": "A lightweight publishing surface for Airnest's internal documents: CEO briefings, integration status reports, meeting briefs, and operational snapshots, each rendered as a self-contained HTML artifact behind an access-gated landing page. It is a static site (hand-written HTML, CSS, and vanilla JS on GitHub Pages) built around a shared house style, with reusable document and email templates and an auto-sorting, newest-first archive index. Live and in routine use, it also acts as the publishing target for the weekly operations briefing pipeline."
+        },
+        {
+          "id": "weekly-ops-briefing",
+          "name": "Weekly Ops Briefing",
+          "url": "https://github.com/Airnest-Homes-SL",
+          "desc": "Automated Monday CEO briefing pipeline — Claude reads all project files + Gmail, generates a reviewed report, and emails the CEO after my approval",
+          "long": "An automated weekly briefing pipeline that produces a short, bottom-line-first operations report for the CEO. A scheduled job runs Claude Code headlessly to read every project's working files plus the prior week's company email, drafts the briefing in markdown and light HTML, emails it for review, and then sends the approved version on, applying any inline corrections the reviewer replies with. Built from shell scripts, a macOS scheduler, and a Gmail integration; it has been running weekly since May 2026, with message threading so each edition chains into a single ongoing conversation."
+        },
+        {
+          "id": "mews-api-connector",
+          "name": "Mews API Connector",
+          "url": "https://github.com/Airnest-Homes-SL/mews-api-connector",
+          "desc": "Certified Mews integration client — stdlib-only Python wrappers for reservations, bills, and customers across all 8 properties",
+          "long": "A certified private-integration client for the Mews hospitality PMS, covering the certification process and the reusable code that came out of it. The client is dependency-free Python (3.10+, standard library only) with modules for reservations, bills, customers, and property configuration, per-property and portfolio access tokens supplied via environment variables, plus a recipe book and read/write test suites. Certification is complete and production credentials are in place across all eight properties; the client is in active use and packaged to be portable enough for the CEO to run his own instance."
+        },
+        {
+          "id": "guesty-mews-migration",
+          "name": "Guesty–Mews Migration",
+          "url": "https://github.com/Airnest-Homes-SL",
+          "desc": "Active PMS migration for all 8 Airnest properties from Guesty to Mews — API probes, field mapping, reservation imports, and per-property runbooks",
+          "long": "The working project for moving all eight Airnest properties off Guesty and onto Mews. It covers API probing on both platforms, an entity-by-entity map of what can be migrated programmatically versus rebuilt by hand, reservation and guest import file builders, per-property configuration runbooks, and user and role setup, using Python for extraction and transformation, spreadsheet import templates for the Mews side, and browser automation for interfaces with no API. Active and running property by property on a staged go-live schedule, with several hotels already fully migrated."
+        },
+        {
+          "id": "gestor-hospedajes",
+          "name": "Gestor Hospedajes",
+          "url": "https://github.com/Airnest-Homes-SL/Gestor_Hospedajes",
+          "desc": "Multi-tenant SaaS auto-filing Spanish SES.Hospedajes guest reports — per-unit owner remapping, XML PV/RH builders, SOAP submission",
+          "long": "A multi-tenant service that automates Spanish SES.Hospedajes guest reporting (RD 933/2021) for lodging operators, with per-unit remapping of owner registration numbers: the case native PMS integrations do not handle. The Python engine models reservations, validates and quarantines incomplete records rather than filing them, builds the PV and RH XML documents, and submits them over SOAP (ZIP plus Base64 payloads) or emits bulk-upload files; a Next.js dashboard and Postgres/Supabase job queue are designed but intentionally dormant. Built to EU data-residency and GDPR constraints, including a strict field allowlist and no storage of identity-document images. The engine core is complete and covered by tests, with the single-tenant filing mode shipping first."
+        },
+        {
+          "id": "airnest-ops-brain",
+          "name": "Airnest Ops Brain",
+          "url": "https://github.com/Airnest-Homes-SL",
+          "desc": "Architecture for Airnest's internal intelligence layer — FastMCP + SQLite data lake connecting 9 tools; Mews webhook receiver live on a cloud VPS",
+          "long": "The architecture and phased plan for Airnest's internal intelligence layer: a FastMCP server backed by a local SQLite data lake that consolidates the PMS, housekeeping, revenue management, accounting, banking, guest communications, HR, and energy-consumption systems into one queryable source, refreshed by a nightly sync plus real-time PMS webhooks. A first component is already deployed: a Mews webhook receiver running as a FastAPI service behind Nginx with TLS on a small cloud VPS. The wider build is deliberately on hold behind the PMS migration and the guest-communications rollout, with the full schema, tool inventory, and phase gates documented in the meantime."
+        },
+        {
+          "id": "conduit-onboarding",
+          "name": "Conduit Onboarding",
+          "url": "https://github.com/Airnest-Homes-SL",
+          "desc": "Procurement tracker for Conduit.ai as Airnest's AI front-desk — WhatsApp, OTA inbox, email, voice AI, and Mews integration",
+          "long": "A procurement and onboarding workspace for adopting Conduit as Airnest's AI front desk, covering guest messaging across WhatsApp, OTA inboxes, email, and voice, connected to the PMS. It tracks commercial negotiation, listing and property configuration, staff workflows, and an ongoing defect log, and includes a scheduled automation that reads the mailbox, reconciles a Notion bug tracker, and emails a weekly change report. The platform is live in production with high automation coverage; commercial terms and the open defect backlog remain under active review, alongside a documented plan to reassess once the PMS ships native guest messaging."
+        },
+        {
+          "id": "infrastructure-setup",
+          "name": "Infrastructure Setup",
+          "url": "https://github.com/Airnest-Homes-SL/infrastructure-setup",
+          "desc": "Living inventory and change log for all Airnest HQ infrastructure — where every repo, service, secret, and shared doc lives",
+          "long": "A living inventory and change log for Airnest's technical setup, a reference project rather than a codebase. It records where every repository, hosted service, domain, certificate, scheduled job, and shared document lives, plus pointers to where each secret is stored (never the values themselves), and requires a dated entry for any infrastructure change. The initial consolidation into a company-owned GitHub organisation is complete, and the inventory is maintained as the source of truth for 'where does this live?' questions."
+        },
+        {
+          "id": "siteminder-workshop",
+          "name": "SiteMinder Workshop",
+          "url": "https://github.com/Airnest-Homes-SL",
+          "desc": "Sets up SiteMinder as Airnest's channel manager between Mews and the OTAs (Booking.com, Airbnb, Expedia) — account/property config, activation, go-live tracking",
+          "long": "Sets up SiteMinder as the channel manager sitting between Mews and the OTAs, so availability and rates push outward and bookings flow back in. Scope covers account and property configuration, room-type and rate-plan mapping between the two systems, scraping and normalising property and room descriptions so listings launch complete, and OTA channel mapping with go-live checks. Research recorded here established that SiteMinder exposes no configuration write API to hotelier customers, so setup is done through the web UI with browser automation for repetitive edits. The first property's room types are configured and verified and the Mews link has passed testing, with activation and a possible PMS-native channel-manager alternative still being evaluated."
+        }
+      ]
+    },
+    {
+      "id": "pilot",
+      "label": "Pilot",
+      "projects": [
+        {
+          "id": "crew-briefing",
+          "name": "Crew Briefing",
+          "url": "https://github.com/CommanderWi11/Crew-Briefing",
+          "desc": "Automated pre-flight briefing for Binter E195-E2 — headless Playwright PDF scraper, weather and NOTAM extraction, and HTML email timed to STD−90min via launchd",
+          "long": "A Python pipeline that assembles a complete pre-flight briefing for E195-E2 operations without manual work: it logs into the airline's flight-planning and operations portals headlessly with Playwright, downloads the operational flight plan and related PDFs, and extracts weather, NOTAMs, route data and open deferred-maintenance (MEL/CDL) items into a single structured brief. Output is a styled HTML email with generated PDF attachments (flight-level and wind tables, and an indexed MEL extract), delivered on a schedule keyed to scheduled departure time. It also includes a fuel-first cruise advisor that interpolates published aircraft performance tables to suggest optimum level and Mach, and refuses to extrapolate outside the published data. Built with Python, Playwright and PDF parsing libraries; actively used on the line and backed by roughly 250 automated tests."
+        },
+        {
+          "id": "flight-bag",
+          "name": "Flight Bag",
+          "url": "https://github.com/CommanderWi11/Flight_Bag",
+          "desc": "Pilot operations suite — daily Binter Gmail capture and classification, Monday manual mirror with highlight promotion, and dual-mode pre-flight schedule digest",
+          "long": "A pilot operations suite that keeps day-to-day airline paperwork current and pushes only what matters into the inbox. It performs a daily read-only capture of company email and schedule data, classifies communications by type, mirrors the document manager on a weekly schedule to pull down new manual revisions, and automatically carries a pilot's PDF highlights across from the superseded revision to the new one. A dual-mode digest email covers either the working day or the eve of a duty block, listing new communications, attaching the relevant PDFs and flagging special activities such as line checks read from the parsed roster. Written in Python with the Gmail API, headless browser automation and PDF tooling; in production, having been narrowed in 2026 from a broader study hub into a focused operations data pipeline."
+        },
+        {
+          "id": "ecrew-mcp",
+          "name": "eCrew MCP",
+          "url": "https://github.com/CommanderWi11/MCP_Projects",
+          "desc": "MCP server for Binter eCrew portal — headless login, monthly roster PDF download, structured parsing of flights and standby duties, and Claude tool exposure",
+          "long": "A Model Context Protocol server that makes the airline's crew portal queryable from Claude. It performs a headless Playwright login, navigates the scheduling module to export the monthly roster PDF, and parses it into structured JSON (flights and legs with times, deadheads, standby and training duties, hotels and monthly statistics), with per-month caching and a scheduled pre-warm so downstream tools can read the data without logging in. Built in Node and TypeScript on the official MCP SDK over stdio, using pdfjs-dist for parsing, with credentials kept outside the repository and an offline test suite run against fixtures. Version 1 is shipped and verified end to end, has survived a portal front-end redesign, and its cached output feeds the other pilot projects."
+        }
+      ]
     }
-  } else {
-    var newId = sectionId + '-' + Date.now();
-    section.entries.push({ id: newId, name: name, version: version, notes: notes, links: links });
-  }
-
-  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
-
-  closeModal();
-  await commitData(data, editingSnapshot ? 'edit ' + name : 'add ' + name);
+  ]
 }
-
-/* ---------- Delete entry ---------- */
-async function deleteEntry(sectionId, entryId) {
-  if (!confirm('Delete this entry?')) return;
-  var data = getCurrentData();
-  var section = data.sections.find(function(s) { return s.id === sectionId; });
-  if (!section) return;
-  var entry = section.entries.find(function(e) { return e.id === entryId; });
-  var entryName = entry ? entry.name : 'entry';
-  section.entries = section.entries.filter(function(e) { return e.id !== entryId; });
-  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
-  await commitData(data, 'delete ' + entryName);
-}
-
-/* ---------- renderAll (re-render after commit) ---------- */
-function renderAll(data) {
-  // Re-use the render functions defined in the IIFE above
-  // We need to reach them — they are redefined here for renderAll's use
-  function _escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-  function _renderLinks(links) {
-    if (!links || links.length === 0) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
-    return '<div class="link-badges">' +
-      links.map(function(l) {
-        return '<a class="link-badge" href="' + _escHtml(l.url) + '" target="_blank" rel="noopener">' + _escHtml(l.label) + '</a>';
-      }).join('') + '</div>';
-  }
-  function _renderNotes(notes) {
-    if (!notes) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
-    return '<details class="notes-details"><summary>notes</summary><div class="notes-content">' + (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(notes) : notes) + '</div></details>';
-  }
-  function _renderSubEntries(subEntries) {
-    // s.notes may contain <code> tags — sanitized via DOMPurify, same as renderNotes
-    if (!subEntries || subEntries.length === 0) return '';
-    var items = subEntries.map(function(s) {
-      return '<li class="sub-entry">' +
-        '<span class="sub-entry-name">' + _escHtml(s.id) + '</span>' +
-        '<span class="sub-entry-notes">' + (s.notes ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(s.notes) : s.notes) : '') + '</span>' +
-        '</li>';
-    }).join('');
-    return '<ul class="sub-entries">' + items + '</ul>';
-  }
-
-  function _renderEntry(entry, sectionId) {
-    return '<tr class="entry-row" id="entry-' + _escHtml(entry.id) + '">' +
-      '<td><div class="entry-name">' + _escHtml(entry.name) + '</div>' +
-      (entry.version ? '<div class="entry-version">' + _escHtml(entry.version) + '</div>' : '') +
-      '</td>' +
-      '<td class="links-cell">' + _renderLinks(entry.links) + '</td>' +
-      '<td class="notes-cell">' + _renderNotes(entry.notes) + _renderSubEntries(entry.subEntries) + '</td>' +
-      '<td style="width:1px;white-space:nowrap">' +
-        '<div class="edit-controls" data-entry-id="' + _escHtml(entry.id) + '" data-section-id="' + _escHtml(sectionId) + '">' +
-          '<button class="btn-edit" onclick="startEditEntry(\'' + _escHtml(sectionId) + '\', \'' + _escHtml(entry.id) + '\')">Edit</button>' +
-          '<button class="btn-delete" onclick="deleteEntry(\'' + _escHtml(sectionId) + '\', \'' + _escHtml(entry.id) + '\')">Delete</button>' +
-        '</div>' +
-      '</td>' +
-      '</tr>';
-  }
-  function _renderSection(section) {
-    var entriesHtml = section.entries.map(function(e) { return _renderEntry(e, section.id); }).join('');
-    return '<section class="stack-section" id="section-' + _escHtml(section.id) + '">' +
-      '<div class="section-header">' +
-        '<span class="section-order">' + section.order + '</span>' +
-        '<h2 class="section-title">' + _escHtml(section.title) + '</h2>' +
-        '<div class="edit-controls" style="display:inline-flex;margin-left:12px;vertical-align:middle">' +
-          '<button onclick="deleteSection(\'' + _escHtml(section.id) + '\')" style="font-size:11px;padding:2px 8px;border:1px solid #d0d7de;border-radius:4px;background:#fff8f8;color:#cf222e;cursor:pointer">Delete section</button>' +
-        '</div>' +
-      '</div>' +
-      '<table class="entries-table">' +
-        '<thead><tr>' +
-          '<th style="width:180px">Tool</th>' +
-          '<th>Links</th>' +
-          '<th>Notes</th>' +
-          '<th class="edit-controls" style="width:1px"></th>' +
-        '</tr></thead>' +
-        '<tbody>' + entriesHtml + '</tbody>' +
-      '</table>' +
-      '</section>';
-  }
-
-  var main = document.getElementById('main');
-  main.innerHTML = data.sections.map(_renderSection).join('');
-
-  // Rebuild TOC
-  var tocList = document.getElementById('toc-list');
-  if (tocList) {
-    tocList.innerHTML = '';
-    data.sections.forEach(function(section) {
-      var li = document.createElement('li');
-      li.className = 'toc-item';
-      li.dataset.id = section.id;
-      li.innerHTML = '<a href="#section-' + _escHtml(section.id) + '"><span class="toc-num">' + section.order + '</span>' + _escHtml(section.title) + '</a>';
-      tocList.appendChild(li);
-    });
-  }
-  // Also update mobile select
-  var mobileSelect = document.getElementById('mobile-select');
-  if (mobileSelect) {
-    mobileSelect.innerHTML = '<option value="">— choose section —</option>' + data.sections.map(function(s) {
-      return '<option value="' + _escHtml(s.id) + '">' + s.order + '. ' + _escHtml(s.title) + '</option>';
-    }).join('');
-  }
-
-  var isAuthed = !!window._githubToken;
-  document.querySelectorAll('.edit-controls').forEach(function(el) {
-    el.style.display = isAuthed ? 'flex' : 'none';
-  });
-
-  var dateStr = (data.meta && data.meta.lastUpdated) || '';
-  var headerDate = document.getElementById('header-date');
-  if (headerDate) headerDate.textContent = 'Updated: ' + dateStr;
-  var footerMeta = document.getElementById('footer-meta');
-  if (footerMeta) footerMeta.textContent = 'Last updated: ' + dateStr + ' · Maintained by ' + ((data.meta && data.meta.owner) || '');
-
-  if (window._stackObserver) {
-    window._stackObserver.disconnect();
-    document.querySelectorAll('.stack-section').forEach(function(el) { window._stackObserver.observe(el); });
-  }
-}
-
-/* ---------- Commit to GitHub ---------- */
-async function commitData(data, description) {
-  var token = window._githubToken;
-  if (!token) { alert('Not authenticated'); return; }
-
-  var saveBtn = document.getElementById('modal-save-btn');
-  if (saveBtn) saveBtn.textContent = 'Saving...';
-
-  try {
-    // 1. Update the JSON in the script tag
-    document.getElementById('stack-data').textContent = JSON.stringify(data, null, 2);
-
-    // 2. Get current file SHA
-    var metaRes = await fetch('https://api.github.com/repos/CammanderWi11/ai-supastack/contents/index.html', {
-      headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    var meta = await metaRes.json();
-    if (!meta.sha) throw new Error('Could not get file SHA');
-
-    // 3. Serialize full HTML
-    var htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-
-    // 4. Base64 encode
-    var encoded = btoa(unescape(encodeURIComponent(htmlContent)));
-
-    // 5. Commit
-    var commitRes = await fetch('https://api.github.com/repos/CammanderWi11/ai-supastack/contents/index.html', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'token ' + token,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
-      },
-      body: JSON.stringify({
-        message: 'Update AI stack: ' + description,
-        content: encoded,
-        sha: meta.sha
-      })
-    });
-
-    var result = await commitRes.json();
-    if (!commitRes.ok) throw new Error(result.message || 'Commit failed');
-
-    // 6. Re-render
-    renderAll(data);
-    showToast('Saved! GitHub Pages will update in ~30s.');
-  } catch (err) {
-    alert('Save failed: ' + err.message);
-  } finally {
-    if (saveBtn) saveBtn.textContent = 'Save';
-  }
-}
-
-/* ---------- Add Section modal ---------- */
-function openAddSectionModal() {
-  document.getElementById('section-title-input').value = '';
-  document.getElementById('section-modal').style.display = 'flex';
-  setTimeout(function() { document.getElementById('section-title-input').focus(); }, 0);
-}
-
-function closeSectionModal() {
-  document.getElementById('section-modal').style.display = 'none';
-}
-
-async function saveSection() {
-  var title = document.getElementById('section-title-input').value.trim();
-  if (!title) { alert('Title is required'); return; }
-  var data = getCurrentData();
-  var maxOrder = Math.max(0, ...data.sections.map(function(s) { return s.order; }));
-  var id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  var uniqueId = data.sections.some(function(s) { return s.id === id; }) ? id + '-' + Date.now() : id;
-  data.sections.push({ id: uniqueId, title: title, order: maxOrder + 1, entries: [] });
-  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
-  closeSectionModal();
-  await commitData(data, 'add section ' + title);
-}
-
-/* ---------- Delete Section ---------- */
-async function deleteSection(sectionId) {
-  var data = getCurrentData();
-  var section = data.sections.find(function(s) { return s.id === sectionId; });
-  if (!section) return;
-  if (section.entries.length > 0) {
-    if (!confirm('Delete section "' + section.title + '" and all ' + section.entries.length + ' entries in it?')) return;
-  } else {
-    if (!confirm('Delete empty section "' + section.title + '"?')) return;
-  }
-  data.sections = data.sections.filter(function(s) { return s.id !== sectionId; });
-  data.meta.lastUpdated = new Date().toISOString().slice(0, 10);
-  await commitData(data, 'delete section ' + section.title);
-}
-
-/* ---------- Close modal on backdrop click ---------- */
-document.getElementById('entry-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-document.getElementById('section-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeSectionModal();
-});
-
-/* ---------- Close modal on Escape key ---------- */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    if (document.getElementById('entry-modal').style.display !== 'none') closeModal();
-    if (document.getElementById('section-modal').style.display !== 'none') closeSectionModal();
-  }
-});
 </script>
-
+<script>
+(function () {
+  var root = document.documentElement;
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ass_theme', next); } catch (e) {}
+  });
+  // Links inside <summary> must navigate without toggling the card.
+  document.querySelectorAll('summary a').forEach(function (a) {
+    a.addEventListener('click', function (ev) { ev.stopPropagation(); });
+  });
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      chips.forEach(function (c) { c.classList.toggle('active', c === chip); });
+      var f = chip.getAttribute('data-filter');
+      groups.forEach(function (g) {
+        g.hidden = (f !== 'all' && g.getAttribute('data-group') !== f);
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>
